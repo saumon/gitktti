@@ -7,7 +7,7 @@ package GitKttiUtils;
 use strict;
 use warnings;
 use POSIX; ## For using 'strftime'
-use constant GIT_KTTI_VERSION => "1.0.0";
+use constant GIT_KTTI_VERSION => "1.0.1";
 
 sub showVersion {
   print("gitktti v". GIT_KTTI_VERSION ."\n\n");
@@ -487,6 +487,12 @@ sub git_fetchTags {
 sub git_fetchPrune {
   my $ref_ret = $_[0];
   return (launch('git fetch --all --prune', $ref_ret))[0];
+}
+
+sub git_remotePrune {
+  my $arg_remote = $_[0];
+  my $ref_ret    = $_[1];
+  return (launch("git remote prune $arg_remote", $ref_ret))[0];
 }
 
 ## ATTENTION :
