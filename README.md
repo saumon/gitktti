@@ -9,8 +9,9 @@ The `gitktti` scripts are provided to help developers safely use git flow. So po
   - [Table of contents](#table-of-contents)
   - [Installation](#installation)
   - [Releases](#releases)
-    - [Release 1.0.1 - 25/03/2023](#release-101---25032023)
-    - [Release 1.0.0 - 23/03/2023](#release-100---23032023)
+    - [Release `1.0.2` - JJ/MM/2023](#release-102---jjmm2023)
+    - [Release `1.0.1` - 25/03/2023](#release-101---25032023)
+    - [Release `1.0.0` - 23/03/2023](#release-100---23032023)
 
 ## Installation
 
@@ -36,12 +37,17 @@ export PERL5LIB=..../gitktti/modules
 
 ## Releases
 
-### Release 1.0.1 - 25/03/2023
+### Release `1.0.2` - JJ/MM/2023
+
+- NEW FEATURES:
+  - **???:** wip
+
+### Release `1.0.1` - 25/03/2023
 
 - NEW FEATURES:
   - **kprune:** added possibility to delete local branches
 
-### Release 1.0.0 - 23/03/2023
+### Release `1.0.0` - 23/03/2023
 
 - NEW FEATURES:
   - **gitktti:** forked from top secret project: `git_catti (v6.14)`
