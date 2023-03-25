@@ -53,12 +53,31 @@ if ( $arg_help ) {
   exit(0);
 }
 
+## Get tracked remote branch...
+my %tracked_branch = GitKttiUtils::git_getTrackedRemoteBranch(\$ret);
+
 ## arg : --prune
 if ( $arg_prune ) {
   if ( GitKttiUtils::isResponseYes("Do you want to clean your local branches?") ) {
     GitKttiUtils::git_fetchPrune(\$ret);
+
+    if ( $tracked_branch{"remote"} ne "" ) {
+      GitKttiUtils::git_remotePrune($tracked_branch{"remote"}, \$ret);
+
+      ## Delete local branches not found on remote...
+      foreach my $local_branch (GitKttiUtils::git_getLocalBranchesFilter('', \$ret)) {
+        if ( scalar(GitKttiUtils::git_getRemoteBranchesFilter($tracked_branch{"remote"}, "$local_branch\$", \$ret)) == 0 ) {
+          print "local branch '" . $local_branch . "' not found on remote.\n";
+          GitKttiUtils::git_deleteLocalBranch($local_branch, \$ret);
+        }
+        else {
+          print "local branch '" . $local_branch . "' found on remote. I will not delete it ^^\n";
+        }
+      }
+    }
   }
 
+  ## Local tags cleaning...
   if ( GitKttiUtils::isResponseYes("Do you want to clean your local tags?") &&
        GitKttiUtils::isResponseYes("! WARNING ! All local tags will be deleted. Are you sure to be sure?") ) {
     GitKttiUtils::git_cleanLocalTags(\$ret);
@@ -110,9 +129,6 @@ else {
 
 ## Get current branch...
 $current_branch = GitKttiUtils::git_getCurrentBranch(\$ret);
-
-## Get tracked remote branch...
-my %tracked_branch = GitKttiUtils::git_getTrackedRemoteBranch(\$ret);
 
 ## mode : hotfix
 if ( $mode eq MODE_HOTFIX ) {
