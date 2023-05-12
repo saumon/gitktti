@@ -76,12 +76,16 @@ gitGraph
 ---
 title: Git flow - hotfix
 ---
-%%{init: { 'gitGraph': {'showCommitLabel': false, 'mainBranchName': 'master'}} }%%
-  %%{init: { 'logLevel': 'debug', 'theme': 'default' , 'themeVariables': {
-            'git0': '#ff0000',
-            'git1': '#ffff00',
-            'git2': '#00ff00'
-      } } }%%
+%%{init: {  'logLevel': 'debug',
+            'gitGraph': {
+              'showCommitLabel': false,
+              'mainBranchName': 'master'
+            },
+            'themeVariables': {
+              'git0': '#ff0000',
+              'git1': '#ffff00',
+              'git2': '#00ff00'}
+            } }%%
 gitGraph
     commit tag:"1.0.0"
     branch hotfix_1.0.1
@@ -107,12 +111,16 @@ gitGraph
 ---
 title: Git flow - feature
 ---
-%%{init: { 'gitGraph': {'showCommitLabel': false, 'mainBranchName': 'master'}} }%%
-  %%{init: { 'logLevel': 'debug', 'theme': 'default' , 'themeVariables': {
-            'git0': '#ff0000',
-            'git1': '#00ff00',
-            'git2': '#0000ff'
-      } } }%%
+%%{init: {  'logLevel': 'debug',
+            'gitGraph': {
+              'showCommitLabel': false,
+              'mainBranchName': 'master'
+            },
+            'themeVariables': {
+              'git0': '#ff0000',
+              'git1': '#00ff00',
+              'git2': '#0000ff'}
+            } }%%
 gitGraph
     commit tag:"1.0.0"
     branch develop
