@@ -7,7 +7,7 @@ package GitKttiUtils;
 use strict;
 use warnings;
 use POSIX; ## For using 'strftime'
-use constant GIT_KTTI_VERSION => "1.0.1";
+use constant GIT_KTTI_VERSION => "1.0.2";
 
 sub showVersion {
   print("gitktti v". GIT_KTTI_VERSION ."\n\n");
