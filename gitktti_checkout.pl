@@ -21,13 +21,12 @@ my $ret             = 99;
 my $current_branch  = "";
 my $local_branch    = "";
 my $remote_branch   = "";
-my $master_branch   = "";
-my $develop_branch  = "";
 my $deleted         = 0;
 my @local_branches  = ();
 my @remote_branches = ();
 my @develop_branches  = ();
 my @master_branches   = ();
+my @local_dev_or_master_branches = ();
 
 ## Args reading...
 GetOptions ('help' => \$arg_help, 'filter=s' => \$arg_filter, 'delete' => \$arg_delete);
@@ -43,24 +42,10 @@ if ( $arg_help ) {
 ## Get develop branch real name (locally)
 @develop_branches = GitKttiUtils::git_getLocalBranchesFilter(REGEX_DEVELOP, \$ret);
 
-if ( @develop_branches ne 1 ) {
-  print("ERROR: Develop branch not found or more than one! (looked for '" . REGEX_DEVELOP . "' ). Abort!\n");
-  exit(2);
-}
-else {
-  $develop_branch = $develop_branches[0];
-}
-
 ## Get master branch real name (locally)
 @master_branches = GitKttiUtils::git_getLocalBranchesFilter(REGEX_MASTER, \$ret);
 
-if ( @master_branches ne 1 ) {
-  print("ERROR: Master branch not found or more than one! (looked for '" . REGEX_MASTER . "' ). Abort!\n");
-  exit(2);
-}
-else {
-  $master_branch = $master_branches[0];
-}
+@local_dev_or_master_branches = (@develop_branches, @master_branches);
 
 ## Get tracked remote branch...
 my %tracked_branch = GitKttiUtils::git_getTrackedRemoteBranch(\$ret);
@@ -80,11 +65,18 @@ if ( @local_branches > 0 ) {
 
     ## The only reason to switch is when you want to delete your branch
     if ( $arg_delete ) {
-      print("WARNING: you already are on this branch, need to switch to '$develop_branch' or '$master_branch' in order to delete it...\n");
+      print("WARNING: you already are on this branch, need to switch to another in order to delete it...\n");
 
-      GitKttiUtils::git_checkoutBranchNoConfirm(
-          GitKttiUtils::getSelectResponse("Where to?", $develop_branch, $master_branch)
-      );
+      if ( @local_dev_or_master_branches > 0 ) {
+        ## Checkout develop or master branch
+        GitKttiUtils::git_checkoutBranchNoConfirm(
+          GitKttiUtils::getSelectResponse("Where to?", @local_dev_or_master_branches)
+        );
+      }
+      else {
+        print("ERROR: No develop or master branches found !\n");
+        exit(1);
+      }
     }
     else {
       print("You already are on this branch!\n");

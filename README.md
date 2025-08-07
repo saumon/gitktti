@@ -341,6 +341,11 @@ kco                             # Switches to another branch
 
 ## Releases
 
+### Release `1.0.3` - 07/08/2025
+
+- NEW FEATURES:
+  - **kco:** command is now less strict when using `--delete` arg
+
 ### Release `1.0.2` - 28/06/2025
 
 - NEW FEATURES:
