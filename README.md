@@ -1,11 +1,11 @@
-# The `gitktti` project *- by R&Oslash;BU&trade;*
+# The `gitktti` project *- by saumon&trade;*
 
 The `gitktti` scripts are provided to help developers safely use git flow. So powerful...
->**r&oslash;bu:** Yes so powerful!
+>**saumon:** Yes so powerful!
 
 ## Table of contents
 
-- [The `gitktti` project *- by RØBU™*](#the-gitktti-project---by-røbu)
+- [The `gitktti` project *- by saumon™*](#the-gitktti-project---by-saumon)
   - [Table of contents](#table-of-contents)
   - [Description](#description)
     - [Git flow principles](#git-flow-principles)
@@ -18,9 +18,12 @@ The `gitktti` scripts are provided to help developers safely use git flow. So po
   - [Installation](#installation)
     - [Environment setup](#environment-setup)
     - [Recommended aliases](#recommended-aliases)
+    - [Quality Assurance](#quality-assurance)
     - [Alias descriptions](#alias-descriptions)
     - [Usage examples](#usage-examples)
   - [Releases](#releases)
+    - [Release `1.0.4` - 13/08/2025](#release-104---13082025)
+    - [Release `1.0.3` - 07/08/2025](#release-103---07082025)
     - [Release `1.0.2` - 28/06/2025](#release-102---28062025)
     - [Release `1.0.1` - 25/03/2023](#release-101---25032023)
     - [Release `1.0.0` - 23/03/2023](#release-100---23032023)
@@ -88,7 +91,8 @@ gitGraph
 
 ### Feature workflow
 
-Feature branches are used to develop new functionality. They are created from `develop` and merged back into `develop` when complete.
+Feature branches are used to develop new functionality. They are created from
+`develop` and merged back into `develop` when complete.
 
 ```mermaid
 ---
@@ -134,7 +138,8 @@ kfixend
 
 ### Hotfix workflow
 
-Hotfix branches are used for urgent production fixes. They branch from `master` and merge back to both `master` and `develop`.
+Hotfix branches are used for urgent production fixes. They branch from `master`
+and merge back to both `master` and `develop`.
 
 ```mermaid
 ---
@@ -181,7 +186,8 @@ kfixend
 
 ### Release workflow
 
-Release branches are used to prepare a new version. They branch from `develop`, allow for final adjustments, then merge to both `master` and `develop`.
+Release branches are used to prepare a new version. They branch from `develop`,
+allow for final adjustments, then merge to both `master` and `develop`.
 
 ```mermaid
 ---
@@ -228,7 +234,8 @@ kfixend
 
 ### Hotfix during release workflow
 
-Special case: when a release is in progress and a hotfix is needed, the hotfix must be merged into the release branch first.
+Special case: when a release is in progress and a hotfix is needed, the hotfix
+must be merged into the release branch first.
 
 ```mermaid
 ---
@@ -298,6 +305,34 @@ alias ktag='......./gitktti_tag.pl'
 alias kco='......../gitktti_checkout.pl'
 ```
 
+### Quality Assurance
+
+GitKtti includes comprehensive unit tests to ensure reliability:
+
+```bash
+# Install test environment
+./setup_tests.sh
+
+# Run all tests
+make test
+
+# Run tests with coverage
+make test-coverage
+
+# Validate complete project
+make validate
+```
+
+**Test Coverage:**
+
+- ✅ **50+ Unit Tests** covering all core functions
+- ✅ **Git Integration Tests** for repository operations
+- ✅ **Performance Tests** ensuring optimal speed
+- ✅ **Syntax Validation** for all Perl scripts
+- ✅ **CI/CD Pipeline** with GitHub Actions
+
+For detailed testing information, see [README_TESTS.md](README_TESTS.md) or [TESTING.md](TESTING.md).
+
 ### Alias descriptions
 
 | Alias | Purpose | Description |
@@ -341,6 +376,11 @@ kco                             # Switches to another branch
 
 ## Releases
 
+### Release `1.0.4` - 13/08/2025
+
+- NEW FEATURES:
+  - **gitktti**: added unit tests for all core functions
+
 ### Release `1.0.3` - 07/08/2025
 
 - NEW FEATURES:
@@ -349,7 +389,8 @@ kco                             # Switches to another branch
 ### Release `1.0.2` - 28/06/2025
 
 - NEW FEATURES:
-  - **README:** added detailed workflows for feature, hotfix, release, and hotfix during release
+  - **README:** added detailed workflows for feature, hotfix, release,
+    and hotfix during release
 
 ### Release `1.0.1` - 25/03/2023
 

@@ -1,0 +1,116 @@
+name: GitKtti Tests
+
+on:
+  push:
+    branches: [ master, develop, dev ]
+  pull_request:
+    branches: [ master, develop ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        perl-version: ['5.30', '5.32', '5.34']
+
+    name: Perl ${{ matrix.perl-version }}
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Setup Perl
+      uses: shogo82148/actions-setup-perl@v1
+      with:
+        perl-version: ${{ matrix.perl-version }}
+
+    - name: Install cpanm
+      run: |
+        curl -L https://cpanmin.us | perl - App::cpanminus
+
+    - name: Install dependencies
+      run: |
+        cpanm --installdeps --notest .
+        cpanm Test::More Time::HiRes File::Temp Getopt::Long FindBin
+
+    - name: Run tests
+      env:
+        CI_MODE: ci
+        VERBOSE_OUTPUT: true
+      run: |
+        chmod +x ci.sh
+        ./ci.sh
+
+    - name: Upload test results
+      uses: actions/upload-artifact@v3
+      if: always()
+      with:
+        name: test-results-perl-${{ matrix.perl-version }}
+        path: |
+          test-metrics.json
+          *.log
+
+  coverage:
+    runs-on: ubuntu-latest
+    name: Coverage Report
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Setup Perl
+      uses: shogo82148/actions-setup-perl@v1
+      with:
+        perl-version: '5.34'
+
+    - name: Install dependencies with coverage tools
+      run: |
+        curl -L https://cpanmin.us | perl - App::cpanminus
+        cpanm Test::More Time::HiRes File::Temp Getopt::Long FindBin Devel::Cover
+
+    - name: Run tests with coverage
+      env:
+        CI_MODE: ci
+        COVERAGE_REPORT: true
+      run: |
+        chmod +x ci.sh
+        ./ci.sh
+
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v3
+      with:
+        file: ./cover_db/coverage.xml
+        flags: unittests
+        name: codecov-umbrella
+
+    - name: Upload coverage report
+      uses: actions/upload-artifact@v3
+      with:
+        name: coverage-report
+        path: |
+          cover_db/
+          test-metrics.json
+
+  lint:
+    runs-on: ubuntu-latest
+    name: Code Quality
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Setup Perl
+      uses: shogo82148/actions-setup-perl@v1
+      with:
+        perl-version: '5.34'
+
+    - name: Install linting tools
+      run: |
+        curl -L https://cpanmin.us | perl - App::cpanminus
+        cpanm Perl::Critic
+
+    - name: Run linting
+      env:
+        CI_MODE: ci
+        LINT_CHECK: true
+      run: |
+        chmod +x ci.sh
+        ./ci.sh
