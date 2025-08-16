@@ -42,14 +42,18 @@ GetOptions ('help' => \$arg_help, 'tag=s' => \$arg_tag, 'name=s' => \$arg_name, 
 
 ## arg : --help
 if ( $arg_help ) {
-  print "usage:   perl gitktti_fix.pl [--help] [--tag JIRATAG] [--name name] [--mode (hotfix|feature|release)] [--prune] [--zeroprefix]\n";
-  print "example: perl gitktti_fix.pl -t PB-1233 --zeroprefix\n";
-  print "         perl gitktti_fix.pl -n coucou\n";
-  print "         perl gitktti_fix.pl -m feature\n";
-  print "         perl gitktti_fix.pl -m feature -t EARTH-1234 --z\n";
-  print "         perl gitktti_fix.pl -m feature -n coucou\n";
-  print "         perl gitktti_fix.pl -m release\n";
-  print "         perl gitktti_fix.pl --prune\n";
+  GitKttiUtils::printSection("HELP - GitKtti Fix");
+  print(GitKttiUtils::BRIGHT_WHITE . "Usage:" . GitKttiUtils::RESET . "\n");
+  print("   perl gitktti_fix.pl [--help] [--tag JIRATAG] [--name name] [--mode (hotfix|feature|release)] [--prune] [--zeroprefix]\n\n");
+
+  GitKttiUtils::printSubSection("Examples");
+  GitKttiUtils::printCommand("perl gitktti_fix.pl -t PB-1233 --zeroprefix");
+  GitKttiUtils::printCommand("perl gitktti_fix.pl -n coucou");
+  GitKttiUtils::printCommand("perl gitktti_fix.pl -m feature");
+  GitKttiUtils::printCommand("perl gitktti_fix.pl -m feature -t EARTH-1234 --z");
+  GitKttiUtils::printCommand("perl gitktti_fix.pl -m feature -n coucou");
+  GitKttiUtils::printCommand("perl gitktti_fix.pl -m release");
+  GitKttiUtils::printCommand("perl gitktti_fix.pl --prune");
   exit(0);
 }
 
@@ -67,11 +71,11 @@ if ( $arg_prune ) {
       ## Delete local branches not found on remote...
       foreach my $local_branch (GitKttiUtils::git_getLocalBranchesFilter('', \$ret)) {
         if ( scalar(GitKttiUtils::git_getRemoteBranchesFilter($tracked_branch{"remote"}, "$local_branch\$", \$ret)) == 0 ) {
-          print "local branch '" . $local_branch . "' not found on remote.\n";
+          GitKttiUtils::printWarning("local branch '" . $local_branch . "' not found on remote.");
           GitKttiUtils::git_deleteLocalBranch($local_branch, \$ret);
         }
         else {
-          print "local branch '" . $local_branch . "' found on remote. I will not delete it ^^\n";
+          GitKttiUtils::printInfo("local branch '" . $local_branch . "' found on remote. I will not delete it ^^");
         }
       }
     }
@@ -91,15 +95,17 @@ if ( $arg_prune ) {
 if ( $arg_tag ) {
 
   if($arg_tag !~ /^(EARTH|MOON|ISS|HALLEY|PB|MOBILE|FRONT)\-\d{1,6}$/) {
-    die "ERR : tag must be like 'EARTH-XXX' or 'MOON-XXX' or 'ISS-XXX' or 'HALLEY-XXX' or 'PB-XXX' or 'MOBILE-XXX' or 'FRONT-XXX' (ex: EARTH-1234) !\n";
+    GitKttiUtils::printError("tag must be like 'EARTH-XXX' or 'MOON-XXX' or 'ISS-XXX' or 'HALLEY-XXX' or 'PB-XXX' or 'MOBILE-XXX' or 'FRONT-XXX' (ex: EARTH-1234) !");
+    exit(1);
   }
 
   $suffix_branch = $arg_tag;
 }
 elsif ( $arg_name ) {
 
-  if($arg_name !~ /^\w+$/) {
-    die "ERR : invalid name !\n";
+  if($arg_name !~ /^[\w\-]+$/) {
+    GitKttiUtils::printError("invalid name !");
+    exit(1);
   }
 
   $suffix_branch = $arg_name;
@@ -115,7 +121,8 @@ if ( $arg_mode ) {
     $mode = $1;
   }
   else {
-    die "ERR : mode must be 'hotfix' or 'feature' or 'release'!\n";
+    GitKttiUtils::printError("mode must be 'hotfix' or 'feature' or 'release'!");
+    exit(1);
   }
 }
 
@@ -138,7 +145,8 @@ if ( $mode eq MODE_HOTFIX ) {
     ## hotfix on hotfix ? strange but why not motherfucker
     if ( $current_branch =~ /${\(REGEX_HOTFIX)}/ ) {
       if ( !GitKttiUtils::isResponseYes("It seems that you wish to start a new hotfix from hotfix '" . $current_branch . "' #weirdo. Are you dumb ? If not, are you sure??") ) {
-        die("END : aborted !\n");
+        GitKttiUtils::printWarning("Aborted !");
+        exit(1);
       }
     }
 
@@ -146,7 +154,8 @@ if ( $mode eq MODE_HOTFIX ) {
     $new_branch = $prefix_branch . $suffix_branch;
   }
   else {
-    die "ERR : not on master/hotfix/release branch !\n";
+    GitKttiUtils::printError("not on master/hotfix/release branch !");
+    exit(1);
   }
 }
 ## mode : feature
@@ -157,7 +166,8 @@ if ( $current_branch =~ /${\(REGEX_DEVELOP)}/ || $current_branch =~ /${\(REGEX_F
     ## feature on feature ? strange but why not motherfucker
     if ( $current_branch =~ /${\(REGEX_FEATURE)}/ ) {
       if ( !GitKttiUtils::isResponseYes("It seems that you wish to start a new feature from feature '" . $current_branch . "' #weirdo. Are you dumb ? If not, are you sure??") ) {
-        die("END : aborted !\n");
+        GitKttiUtils::printWarning("Aborted !");
+        exit(1);
       }
     }
 
@@ -174,7 +184,8 @@ if ( $current_branch =~ /${\(REGEX_DEVELOP)}/ || $current_branch =~ /${\(REGEX_F
     $new_branch = $prefix_branch . $suffix_branch;
   }
   else {
-    die "ERR : not on develop branch !\n";
+    GitKttiUtils::printError("not on develop branch !");
+    exit(1);
   }
 }
 ## mode : release
@@ -216,30 +227,53 @@ elsif ( $mode eq MODE_RELEASE ) {
 
     ## Last check...
     if ( $new_branch eq "" ) {
-      die "ERR : branch name is empty !\n";
+      GitKttiUtils::printError("branch name is empty !");
+      exit(1);
     }
   }
   else {
-    die "ERR : not on develop branch !\n";
+    GitKttiUtils::printError("not on develop branch !");
+    exit(1);
   }
 }
 
-print("\n");
-print("mode            = [$mode]\n");
-print("current branch  = [$current_branch]\n");
-print("tracked[remote] = [" . $tracked_branch{"remote"} . "]\n");
-print("tracked[branch] = [" . $tracked_branch{"branch"} . "]\n");
-print("hotfix/feature  = [$new_branch]\n");
+GitKttiUtils::printSection("Branch Configuration");
+
+print(GitKttiUtils::BRIGHT_WHITE . "Mode:           " . GitKttiUtils::RESET);
+GitKttiUtils::printBranch($mode, $mode);
 print("\n");
 
-if ( GitKttiUtils::isResponseYes("Create $mode [$new_branch]?") ) {
+print(GitKttiUtils::BRIGHT_WHITE . "Current branch: " . GitKttiUtils::RESET);
+if ($current_branch =~ /${\(REGEX_MASTER)}/) {
+  GitKttiUtils::printBranch($current_branch, "master");
+} elsif ($current_branch =~ /${\(REGEX_DEVELOP)}/) {
+  GitKttiUtils::printBranch($current_branch, "develop");
+} elsif ($current_branch =~ /${\(REGEX_FEATURE)}/) {
+  GitKttiUtils::printBranch($current_branch, "feature");
+} elsif ($current_branch =~ /${\(REGEX_HOTFIX)}/) {
+  GitKttiUtils::printBranch($current_branch, "hotfix");
+} elsif ($current_branch =~ /${\(REGEX_RELEASE)}/) {
+  GitKttiUtils::printBranch($current_branch, "release");
+} else {
+  GitKttiUtils::printBranch($current_branch);
+}
+print("\n");
+
+print(GitKttiUtils::BRIGHT_WHITE . "Remote:         " . GitKttiUtils::RESET . GitKttiUtils::CYAN . $tracked_branch{"remote"} . GitKttiUtils::RESET . "\n");
+print(GitKttiUtils::BRIGHT_WHITE . "Tracked branch: " . GitKttiUtils::RESET . GitKttiUtils::CYAN . $tracked_branch{"branch"} . GitKttiUtils::RESET . "\n");
+
+print(GitKttiUtils::BRIGHT_WHITE . "New branch:     " . GitKttiUtils::RESET);
+GitKttiUtils::printBranch($new_branch, $mode);
+print("\n\n");
+
+if ( GitKttiUtils::isResponseYes("Create $mode " . GitKttiUtils::BOLD . $new_branch . GitKttiUtils::RESET . "?") ) {
   GitKttiUtils::launch("git checkout -b $new_branch", \$ret);
 }
 else {
-  print("END : aborted !\n");
+  GitKttiUtils::printWarning("Aborted !");
   exit(2);
 }
 
-if ( ($tracked_branch{"remote"} ne "") && (GitKttiUtils::isResponseYes("Push $mode [$new_branch] to remote [" . $tracked_branch{"remote"} . "]?")) ) {
+if ( ($tracked_branch{"remote"} ne "") && (GitKttiUtils::isResponseYes("Push $mode " . GitKttiUtils::BOLD . $new_branch . GitKttiUtils::RESET . " to remote " . GitKttiUtils::BOLD . $tracked_branch{"remote"} . GitKttiUtils::RESET . "?")) ) {
   GitKttiUtils::launch("git push --set-upstream " . $tracked_branch{"remote"} . " " . $new_branch, \$ret);
 }

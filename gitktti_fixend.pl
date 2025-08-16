@@ -49,17 +49,22 @@ GetOptions ('help' => \$arg_help, 'force' => \$arg_force, 'mode=s' => \$arg_mode
 
 ## arg : --help
 if ( $arg_help ) {
-  print "usage:   perl gitktti_fixend.pl [--help] [--force] [--mode (hotfix|feature|release)]\n";
-  print "example: perl gitktti_fixend.pl --force\n";
-  print "         perl gitktti_fixend.pl --mode hotfix\n";
-  print "         perl gitktti_fixend.pl -m feature\n";
+  GitKttiUtils::printSection("HELP - GitKtti Fix End");
+  print(GitKttiUtils::BRIGHT_WHITE . "Usage:" . GitKttiUtils::RESET . "\n");
+  print("   perl gitktti_fixend.pl [--help] [--force] [--mode (hotfix|feature|release)]\n\n");
+
+  GitKttiUtils::printSubSection("Examples");
+  GitKttiUtils::printCommand("perl gitktti_fixend.pl --force");
+  GitKttiUtils::printCommand("perl gitktti_fixend.pl --mode hotfix");
+  GitKttiUtils::printCommand("perl gitktti_fixend.pl -m feature");
   exit(0);
 }
 
 ## arg : --mode
 if ( $arg_mode ) {
   if($arg_mode !~ /^(${\(MODE_HOTFIX)}|${\(MODE_FEATURE)}|${\(MODE_RELEASE)})$/) {
-    die "ERR : mode must be 'hotfix' or 'feature' or 'release'!\n";
+    GitKttiUtils::printError("mode must be 'hotfix' or 'feature' or 'release'!");
+    exit(1);
   }
 }
 
@@ -67,7 +72,7 @@ if ( $arg_mode ) {
 @develop_branches = GitKttiUtils::git_getLocalBranchesFilter(REGEX_DEVELOP, \$ret);
 
 if ( @develop_branches ne 1 ) {
-  print("ERROR: Develop branch not found or more than one! (looked for '" . REGEX_DEVELOP . "' ). Abort!\n");
+  GitKttiUtils::printError("Develop branch not found or more than one! (looked for '" . REGEX_DEVELOP . "' ). Abort!");
   exit(2);
 }
 else {
@@ -78,7 +83,7 @@ else {
 @master_branches = GitKttiUtils::git_getLocalBranchesFilter(REGEX_MASTER, \$ret);
 
 if ( @master_branches ne 1 ) {
-  print("ERROR: Master branch not found or more than one! (looked for '" . REGEX_MASTER . "' ). Abort!\n");
+  GitKttiUtils::printError("Master branch not found or more than one! (looked for '" . REGEX_MASTER . "' ). Abort!");
   exit(2);
 }
 else {
@@ -117,7 +122,8 @@ elsif($arg_mode) {
 
   ## Special case: mode specified but you are on develop branch!
   if($current_branch =~ /${\(REGEX_DEVELOP)}/) {
-    die "ERROR: specified '" . $arg_mode . "' mode but your are on " . $develop_branch . " branch #weird!\n";
+    GitKttiUtils::printError("specified '" . $arg_mode . "' mode but your are on " . $develop_branch . " branch #weird!");
+    exit(1);
   }
 
   ## Tag name
@@ -127,27 +133,55 @@ elsif($arg_mode) {
   $type_of_branch = $arg_mode;
 }
 else {
-  die "ERROR: not on hotfix/release/" . $develop_branch . " branch !\n";
+  GitKttiUtils::printError("not on hotfix/release/" . $develop_branch . " branch !");
+  exit(1);
 }
 
 ## Get tracked remote branch...
 my %tracked_branch = GitKttiUtils::git_getTrackedRemoteBranch(\$ret);
 
-print("\n");
-print("Master branch   = [$master_branch]\n");
-print("Develop branch  = [$develop_branch]\n");
-print("Branch          = [$current_branch]\n");
-print("Current repo    = [$current_repo]\n");
-print("tracked[remote] = [" . $tracked_branch{"remote"} . "]\n");
-print("tracked[branch] = [" . $tracked_branch{"branch"} . "]\n");
-if($tagname ne "") { print("Tagname         = [$tagname]\n"); }
+GitKttiUtils::printSection("Finalization Summary");
+
+print(GitKttiUtils::BRIGHT_WHITE . "Master branch:  " . GitKttiUtils::RESET);
+GitKttiUtils::printBranch($master_branch, "master");
 print("\n");
 
-if ( GitKttiUtils::isResponseYes("Finalize $type_of_branch branch [$current_branch]?") ) {
+print(GitKttiUtils::BRIGHT_WHITE . "Develop branch: " . GitKttiUtils::RESET);
+GitKttiUtils::printBranch($develop_branch, "develop");
+print("\n");
+
+print(GitKttiUtils::BRIGHT_WHITE . "Current branch: " . GitKttiUtils::RESET);
+if ($current_branch =~ /${\(REGEX_MASTER)}/) {
+  GitKttiUtils::printBranch($current_branch, "master");
+} elsif ($current_branch =~ /${\(REGEX_DEVELOP)}/) {
+  GitKttiUtils::printBranch($current_branch, "develop");
+} elsif ($current_branch =~ /${\(REGEX_FEATURE)}/) {
+  GitKttiUtils::printBranch($current_branch, "feature");
+} elsif ($current_branch =~ /${\(REGEX_HOTFIX)}/) {
+  GitKttiUtils::printBranch($current_branch, "hotfix");
+} elsif ($current_branch =~ /${\(REGEX_RELEASE)}/) {
+  GitKttiUtils::printBranch($current_branch, "release");
+} else {
+  GitKttiUtils::printBranch($current_branch);
+}
+print("\n");
+
+print(GitKttiUtils::BRIGHT_WHITE . "Repository:     " . GitKttiUtils::RESET . GitKttiUtils::CYAN . $current_repo . GitKttiUtils::RESET . "\n");
+print(GitKttiUtils::BRIGHT_WHITE . "Remote:         " . GitKttiUtils::RESET . GitKttiUtils::CYAN . $tracked_branch{"remote"} . GitKttiUtils::RESET . "\n");
+print(GitKttiUtils::BRIGHT_WHITE . "Tracked branch: " . GitKttiUtils::RESET . GitKttiUtils::CYAN . $tracked_branch{"branch"} . GitKttiUtils::RESET . "\n");
+
+if($tagname ne "") {
+  print(GitKttiUtils::BRIGHT_WHITE . "Tag name:       " . GitKttiUtils::RESET);
+  GitKttiUtils::printTag($tagname);
+  print("\n");
+}
+print("\n");
+
+if ( GitKttiUtils::isResponseYes("Finalize $type_of_branch branch " . GitKttiUtils::BOLD . $current_branch . GitKttiUtils::RESET . "?") ) {
 
   ## Check if repository is clean
   if ( !GitKttiUtils::git_isRepoClean() ) {
-    print("ERROR: Your repository is not clean motherfucker ! Aborted !\n");
+    GitKttiUtils::printError("Your repository is not clean motherfucker ! Aborted !");
     exit(2);
   }
 
@@ -155,7 +189,7 @@ if ( GitKttiUtils::isResponseYes("Finalize $type_of_branch branch [$current_bran
   if ( $type_of_branch eq MODE_DEVELOP ) {
     if ( !GitKttiUtils::isResponseYes("! WARNING ! You are on $develop_branch branch. All current developments will be merged into $master_branch branch. Are you sure?") ||
          !GitKttiUtils::isResponseYes("! WARNING ! Are you sure to be sure?") ) {
-      print("ERROR: You are not sure ! Aborted !\n");
+      GitKttiUtils::printError("You are not sure ! Aborted !");
       exit(2);
     }
 
@@ -176,9 +210,10 @@ if ( GitKttiUtils::isResponseYes("Finalize $type_of_branch branch [$current_bran
 
       ## Release branch must be checked out first !
       if ( @releases_local == 0 ) {
-        print("ERROR: You need first to checkout release branch among these :\n\n");
+        GitKttiUtils::printError("You need first to checkout release branch among these :");
+        print("\n");
         for my $branch (@releases_remote) { print ("$branch\n"); }
-        print("\nAborted !\n");
+        GitKttiUtils::printError("Aborted !");
         exit(2);
       }
 
@@ -190,7 +225,7 @@ if ( GitKttiUtils::isResponseYes("Finalize $type_of_branch branch [$current_bran
 
       ## This merge is mandatory !
       if ( !$merge_done ) {
-        print("ERROR: current hotfix not merged in release ! Aborted !\n");
+        GitKttiUtils::printError("current hotfix not merged in release ! Aborted !");
         exit(2);
       }
 
@@ -215,7 +250,7 @@ if ( GitKttiUtils::isResponseYes("Finalize $type_of_branch branch [$current_bran
 
   ## Merge into master forbidden for a feature !
   if ( $type_of_branch eq MODE_FEATURE ) {
-    print("You are on a '" . MODE_FEATURE . "' branch. Merge into $master_branch forbidden !\n");
+    GitKttiUtils::printInfo("You are on a '" . MODE_FEATURE . "' branch. Merge into $master_branch forbidden !");
   }
   else {
     ## Merge current branch into master branch
@@ -246,7 +281,7 @@ if ( GitKttiUtils::isResponseYes("Finalize $type_of_branch branch [$current_bran
           GitKttiUtils::git_tagBranch($tmp, $tagname, $lasttag);
         }
         else {
-          print("Not on [$master_branch] branch !\n");
+          GitKttiUtils::printWarning("Not on [$master_branch] branch !");
         }
       }
     }
@@ -258,5 +293,5 @@ if ( GitKttiUtils::isResponseYes("Finalize $type_of_branch branch [$current_bran
   }
 }
 else {
-  print("END : aborted !\n");
+  GitKttiUtils::printWarning("Aborted !");
 }

@@ -21,6 +21,8 @@ The `gitktti` scripts are provided to help developers safely use git flow. So po
     - [Alias descriptions](#alias-descriptions)
     - [Usage examples](#usage-examples)
   - [Releases](#releases)
+    - [Release `1.0.4` - 16/08/2025](#release-104---16082025)
+    - [Release `1.0.3` - 07/08/2025](#release-103---07082025)
     - [Release `1.0.2` - 28/06/2025](#release-102---28062025)
     - [Release `1.0.1` - 25/03/2023](#release-101---25032023)
     - [Release `1.0.0` - 23/03/2023](#release-100---23032023)
@@ -340,6 +342,11 @@ kco                             # Switches to another branch
 ***
 
 ## Releases
+
+### Release `1.0.4` - 16/08/2025
+
+- NEW FEATURES:
+  - **gitkkti:** console output modernization
 
 ### Release `1.0.3` - 07/08/2025
 
