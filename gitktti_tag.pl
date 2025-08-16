@@ -29,10 +29,12 @@ my $version_min       = "";
 my $version_patch     = "";
 my $version_number    = 0;
 
-print("Current path      : [$current_path]\n");
-print("Current dir       : [$current_dir]\n");
-print("Current repo path : [$current_repo_path]\n");
-print("Current repo      : [$current_repo]\n");
+GitKttiUtils::printSection("Repository Information");
+
+print(GitKttiUtils::BRIGHT_WHITE . "Current path:      " . GitKttiUtils::RESET . GitKttiUtils::CYAN . $current_path . GitKttiUtils::RESET . "\n");
+print(GitKttiUtils::BRIGHT_WHITE . "Current directory: " . GitKttiUtils::RESET . GitKttiUtils::CYAN . $current_dir . GitKttiUtils::RESET . "\n");
+print(GitKttiUtils::BRIGHT_WHITE . "Repository path:   " . GitKttiUtils::RESET . GitKttiUtils::CYAN . $current_repo_path . GitKttiUtils::RESET . "\n");
+print(GitKttiUtils::BRIGHT_WHITE . "Repository name:   " . GitKttiUtils::RESET . GitKttiUtils::CYAN . $current_repo . GitKttiUtils::RESET . "\n");
 
 if($current_branch =~ /^master$/) {
   $lasttag = GitKttiUtils::git_getLastTagFromCurrentBranch(\$ret);
@@ -40,18 +42,34 @@ if($current_branch =~ /^master$/) {
 else {
   if ( !GitKttiUtils::isResponseYes("! WARNING ! You are not on master branch. Tagging should be made on master branch. Are you sure?") ||
        !GitKttiUtils::isResponseYes("! WARNING ! Are you sure to be sure?") ) {
-    print("ERROR: You are not sure ! Aborted !\n");
+    GitKttiUtils::printError("You are not sure ! Aborted !");
     exit(2);
   }
 }
 
 if ( $tagname eq "" ) {
-  $tagname = GitKttiUtils::getResponse("Last tag on this branch is [$lasttag]. Please enter tag value ('$lasttag' --> 'x.x.x') :");
+  $tagname = GitKttiUtils::getResponse("Last tag on this branch is " . GitKttiUtils::BOLD . $lasttag . GitKttiUtils::RESET . ". Please enter tag value ('" . $lasttag . "' --> 'x.x.x') :");
 }
 
-print("Branch  : [$current_branch]\n");
-if($lasttag ne "") { print("lasttag : [$lasttag]\n"); }
-print("tagname : [$tagname]\n");
+GitKttiUtils::printSubSection("Tagging Summary");
+
+print(GitKttiUtils::BRIGHT_WHITE . "Branch:  " . GitKttiUtils::RESET);
+if ($current_branch =~ /^master$/) {
+  GitKttiUtils::printBranch($current_branch, "master");
+} else {
+  GitKttiUtils::printBranch($current_branch);
+}
+print("\n");
+
+if($lasttag ne "") {
+  print(GitKttiUtils::BRIGHT_WHITE . "Last tag: " . GitKttiUtils::RESET);
+  GitKttiUtils::printTag($lasttag);
+  print("\n");
+}
+
+print(GitKttiUtils::BRIGHT_WHITE . "New tag:  " . GitKttiUtils::RESET);
+GitKttiUtils::printTag($tagname);
+print("\n\n");
 
 ## Go tagging !
 GitKttiUtils::git_tagBranch($current_branch, $tagname, $lasttag);

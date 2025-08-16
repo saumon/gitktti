@@ -7,10 +7,116 @@ package GitKttiUtils;
 use strict;
 use warnings;
 use POSIX; ## For using 'strftime'
-use constant GIT_KTTI_VERSION => "1.0.3";
+use constant GIT_KTTI_VERSION => "1.0.4";
+
+# Codes de couleurs ANSI
+use constant {
+  RESET     => "\033[0m",
+  BOLD      => "\033[1m",
+  DIM       => "\033[2m",
+
+  # Couleurs de texte
+  BLACK     => "\033[30m",
+  RED       => "\033[31m",
+  GREEN     => "\033[32m",
+  YELLOW    => "\033[33m",
+  BLUE      => "\033[34m",
+  MAGENTA   => "\033[35m",
+  CYAN      => "\033[36m",
+  WHITE     => "\033[37m",
+
+  # Couleurs vives
+  BRIGHT_RED     => "\033[91m",
+  BRIGHT_GREEN   => "\033[92m",
+  BRIGHT_YELLOW  => "\033[93m",
+  BRIGHT_BLUE    => "\033[94m",
+  BRIGHT_MAGENTA => "\033[95m",
+  BRIGHT_CYAN    => "\033[96m",
+  BRIGHT_WHITE   => "\033[97m",
+
+  # Couleurs de fond
+  BG_RED    => "\033[41m",
+  BG_GREEN  => "\033[42m",
+  BG_YELLOW => "\033[43m",
+  BG_BLUE   => "\033[44m",
+};
 
 sub showVersion {
-  print("gitktti v". GIT_KTTI_VERSION ."\n\n");
+  print(BRIGHT_CYAN . BOLD . "🚀 gitktti " . BRIGHT_WHITE . "v" . GIT_KTTI_VERSION . RESET . "\n");
+  print(DIM . "   Git flow made powerful by RØBU™" . RESET . "\n\n");
+}
+
+# Fonctions d'affichage coloré
+sub printSuccess {
+  my $message = $_[0];
+  print(BRIGHT_GREEN . "✅ " . $message . RESET . "\n");
+}
+
+sub printError {
+  my $message = $_[0];
+  print(BRIGHT_RED . "❌ " . $message . RESET . "\n");
+}
+
+sub printWarning {
+  my $message = $_[0];
+  print(BRIGHT_YELLOW . "⚠️  " . $message . RESET . "\n");
+}
+
+sub printInfo {
+  my $message = $_[0];
+  print(BRIGHT_BLUE . "ℹ️  " . $message . RESET . "\n");
+}
+
+sub printCommand {
+  my $command = $_[0];
+  print(DIM . "\$ " . RESET . CYAN . $command . RESET . "\n");
+}
+
+sub printSection {
+  my $title = $_[0];
+  my $title_length = length($title);
+  my $separator = "═" x ($title_length + 2);
+
+  print("\n" . BRIGHT_MAGENTA . "╔" . $separator . "╗" . RESET . "\n");
+  print(BRIGHT_MAGENTA . "║ " . BOLD . BRIGHT_WHITE . $title . RESET . BRIGHT_MAGENTA . " ║" . RESET . "\n");
+  print(BRIGHT_MAGENTA . "╚" . $separator . "╝" . RESET . "\n");
+}
+
+sub printSubSection {
+  my $title = $_[0];
+  print("\n" . BRIGHT_CYAN . "▶ " . BOLD . $title . RESET . "\n");
+}
+
+sub printBranch {
+  my $branch = $_[0];
+  my $type = $_[1] || "default";
+
+  my $color = CYAN;
+  my $icon = "🌿";
+
+  if ($type eq "master" || $type eq "main") {
+    $color = BRIGHT_RED;
+    $icon = "🏠";
+  } elsif ($type eq "develop" || $type eq "dev") {
+    $color = BRIGHT_GREEN;
+    $icon = "🔨";
+  } elsif ($type eq "feature") {
+    $color = BRIGHT_BLUE;
+    $icon = "✨";
+  } elsif ($type eq "hotfix") {
+    $color = BRIGHT_YELLOW;
+    $icon = "🔥";
+  } elsif ($type eq "release") {
+    $color = BRIGHT_MAGENTA;
+    $icon = "🚀";
+  }
+
+  print($color . $icon . " " . BOLD . $branch . RESET);
+}
+
+sub printTag {
+  my $tag = $_[0];
+  print(BRIGHT_YELLOW . "🏷️  " . BOLD . $tag . RESET);
 }
 
 ##############################################################################
@@ -27,28 +133,53 @@ sub launch {
   $$ref_state = 99;
 
   if ( length($command) == 0 ) {
-    print("launch : command is empty !\n");
+    printError("launch : command is empty !");
     return @out;
   }
 
-  print("--------------------------------------------------------------------------------\n");
-  print("-- Execute [$command]\n");
-  open (CMD, "$command |") or die "launch : ERROR !";
+  printCommand($command);
+
+  open (CMD, "$command 2>&1 |") or die "launch : ERROR !";
+  my $output = "";
+  my @lines = ();
   while(my $ligne = <CMD>) {
-    print($ligne);
     chomp($ligne);
     push(@out, $ligne);
+    push(@lines, $ligne);
   }
   close(CMD);
+
+  # Affichage de la sortie avec indentation et couleur grise
+  if (@lines > 0) {
+    foreach my $line (@lines) {
+      print(DIM . "  │ " . $line . RESET . "\n");
+    }
+    # Supprimer le dernier \n pour ajouter le symbole de statut
+    print("\033[1A"); # Remonter d'une ligne
+    print("\033[K");  # Effacer la ligne
+    my $last_line = $lines[-1];
+    print(DIM . "  │ " . $last_line . RESET);
+  }
 
   ## Get output state
   $$ref_state = $? >> 8;
 
   if ( $$ref_state ne 0 ) {
-    print("\n\$? --> " . $$ref_state . "\n");
+    # Ajouter le X rouge et le code d'erreur à la fin de la sortie
+    if (@lines > 0) {
+      print(BRIGHT_RED . " ✗ (" . $$ref_state . ")" . RESET . "\n");
+    } else {
+      printError("Command failed with exit code: " . $$ref_state);
+    }
+  } else {
+    # Ajouter le checkmark à la fin de la sortie
+    if (@lines > 0) {
+      print(BRIGHT_GREEN . " ✔" . RESET . "\n");
+    } else {
+      printSuccess("Command executed successfully");
+    }
   }
 
-  print("--------------------------------------------------------------------------------\n");
   print("\n");
   return @out;
 }
@@ -59,7 +190,7 @@ sub isResponseYes {
 
   do
   {
-    $rep = lc(getResponse($question . " (y/n)"));
+    $rep = lc(getResponse($question . " " . BRIGHT_GREEN . "(y)" . RESET . "/" . BRIGHT_RED . "(n)" . RESET));
   }
   while ( $rep !~ /^y$/ && $rep !~ /^n$/ );
 
@@ -77,15 +208,13 @@ sub getResponse {
   my $rep = "";
 
   print("\n");
-  print("--------------------------------------------------------------------------------\n");
-  print("$question");
+  print(BRIGHT_CYAN . "❓ " . BOLD . $question . RESET);
   if ( defined($default) && length($default) > 0 ) {
-    print(" (" . $default . ")");
+    print(" " . DIM . "[default: " . BRIGHT_WHITE . $default . RESET . DIM . "]" . RESET);
   }
-  print("\n");
+  print("\n" . BRIGHT_CYAN . "➤ " . RESET);
 
   $rep = <STDIN>;
-  print("--------------------------------------------------------------------------------\n");
   print("\n");
 
   chomp($rep);
@@ -111,8 +240,7 @@ sub getSelectResponse {
   my $question = $_[0];
 
   print("\n");
-  print("--------------------------------------------------------------------------------\n");
-  print("$question\n");
+  printSubSection($question);
 
   for(my $i = 1; $i < $nb_elts; $i++) {
     my @list = split(/\|/, $_[$i]);
@@ -122,17 +250,19 @@ sub getSelectResponse {
 
   for(my $i = 1; $i < $nb_elts; $i++) {
     my @list = split(/\|/, $_[$i]);
-    my $line = " " . LPad($i, 3, ' ') . ") --> " . RPad($list[0], $max_len_rep, ' ');
+    my $number = BRIGHT_CYAN . sprintf("%2d", $i) . RESET;
+    my $option = BRIGHT_WHITE . BOLD . RPad($list[0], $max_len_rep, ' ') . RESET;
+    my $line = "   " . $number . ") " . $option;
 
     if ( scalar @list > 1 ) {
-      $line .= " (" . $list[1] . ")";
+      $line .= " " . DIM . "(" . $list[1] . ")" . RESET;
     }
 
     print($line . "\n");
   }
 
   do {
-    print("Your choice : ");
+    print("\n" . BRIGHT_CYAN . "🎯 Your choice: " . RESET);
     $i_rep = <STDIN>;
   }
   while ( $i_rep !~ /^\d+$/ || ($i_rep < 1) || ($i_rep > ($nb_elts - 1)) );
@@ -140,10 +270,9 @@ sub getSelectResponse {
   if ( ($i_rep >= 1) && ($i_rep < $nb_elts) ) {
     my @list = split(/\|/, $_[$i_rep]);
     $rep = $list[0];
-    print("You have chosen --> [$rep]\n");
+    printSuccess("You have chosen: " . BOLD . $rep . RESET);
   }
 
-  print("--------------------------------------------------------------------------------\n");
   print("\n");
 
   chomp($rep);
@@ -362,13 +491,13 @@ sub git_checkoutBranch {
   my $arg_branch = $_[0];
   my $ret        = 99;
 
-  if (isResponseYes("Checkout branch [$arg_branch]?") ) {
+  if (isResponseYes("Checkout branch " . BOLD . $arg_branch . RESET . "?") ) {
 
     launch("git checkout $arg_branch", \$ret);
 
     ## Exit if checkout fails
     if ( $ret ne 0 ) {
-      print("ERROR: checkout failed ! Aborted !\n");
+      printError("checkout failed ! Aborted !");
       exit(2);
     }
   }
@@ -382,7 +511,7 @@ sub git_checkoutBranchNoConfirm {
 
   ## Exit if checkout fails
   if ( $ret ne 0 ) {
-    print("ERROR: checkout failed ! Aborted !\n");
+    printError("checkout failed ! Aborted !");
     exit(2);
   }
 }
@@ -392,14 +521,14 @@ sub git_deleteLocalBranch {
   my $ret        = 99;
   my $done       = 0;
 
-  if (isResponseYes("Delete local branch [$arg_branch]?") ) {
+  if (isResponseYes("Delete local branch " . BOLD . $arg_branch . RESET . "?") ) {
 
     ## Delete current branch
     launch("git branch -D $arg_branch", \$ret);
 
     ## Exit if command fails
     if ( $ret ne 0 ) {
-      print("ERROR: delete failed ! Aborted !\n");
+      printError("delete failed ! Aborted !");
       exit(2);
     }
 
@@ -519,20 +648,20 @@ sub git_tagBranch {
 
   my $ret          = 99;
   my $tagging_done = 0;
-  my $question     = "Create tag [$tagname] on branch '$branch'";
+  my $question     = "Create tag " . BOLD . $tagname . RESET . " on branch " . BOLD . $branch . RESET;
 
   if ( $tagname eq "" ) {
-    print("ERROR: git_tagBranch, no tagname provided !\n");
+    printError("git_tagBranch, no tagname provided !");
     exit(2);
   }
 
   if ( $lasttag ne "" ) {
-    $question .= " (old tag is [$lasttag])";
+    $question .= " (old tag is " . DIM . $lasttag . RESET . ")";
   }
 
   ## Check current branch name
   if(git_getCurrentBranch(\$ret) !~ /^$branch$/) {
-    print("ERROR: git_tagBranch, bad branch ! (you should be on branch '$branch')\n");
+    printError("git_tagBranch, bad branch ! (you should be on branch '$branch')");
     exit(2);
   }
 
@@ -544,11 +673,11 @@ sub git_tagBranch {
 
     ## Exit if tagging fails
     if ( $ret ne 0 ) {
-      print("ERROR: tagging failed ! Aborted !\n");
+      printError("tagging failed ! Aborted !");
       exit(2);
     }
     else {
-      print("Tag [$tagname] created !\n");
+      printSuccess("Tag " . BOLD . $tagname . RESET . " created !");
       $tagging_done = 1;
     }
 
@@ -556,23 +685,23 @@ sub git_tagBranch {
     my %tracked_branch = git_getTrackedRemoteBranch(\$ret);
 
     if ( $tracked_branch{"remote"} ne "" &&  $tracked_branch{"branch"} ne "" ) {
-      if (isResponseYes("Push tag [$tagname]?") ) {
+      if (isResponseYes("Push tag " . BOLD . $tagname . RESET . "?") ) {
         ## Pushes tag to remote...
         launch("git push --follow-tags", \$ret);
 
         ## Exit if checkout fails
         if ( $ret ne 0 ) {
-          print("ERROR: push failed ! Aborted !\n");
+          printError("push failed ! Aborted !");
           exit(2);
         }
       }
     }
     else {
-      print("No remote, no push, no chocolate !\n");
+      printInfo("No remote, no push, no chocolate !");
     }
   }
   else {
-    print("Tagging aborted !\n");
+    printWarning("Tagging aborted !");
   }
 
   return $tagging_done;
@@ -591,12 +720,12 @@ sub git_pullCurrentBranch {
 
     ## Exit if pull fails
     if ( $ret ne 0 ) {
-      print("ERROR: pull failed ! Aborted !\n");
+      printError("pull failed ! Aborted !");
       exit(2);
     }
   }
   # else {
-  #   print("pullCurrentBranch : no remote, no pull, no chocolate...\n");
+  #   printInfo("pullCurrentBranch : no remote, no pull, no chocolate...");
   # }
 }
 
@@ -607,14 +736,14 @@ sub git_deleteCurrentBranch {
 
   my $ret = 99;
 
-  if (isResponseYes("Delete branch [$arg_current_branch]?") ) {
+  if (isResponseYes("Delete branch " . BOLD . $arg_current_branch . RESET . "?") ) {
 
     ## Delete current branch
     launch("git branch -d $arg_current_branch", \$ret);
 
     ## Delete remote branch
     if ( $arg_remote ne "" && $arg_tracking_remote_branch ne "" ) {
-      if (isResponseYes("Delete tracking remote branch [" . $arg_remote . "/" . $arg_tracking_remote_branch . "]?") ) {
+      if (isResponseYes("Delete tracking remote branch " . BOLD . $arg_remote . "/" . $arg_tracking_remote_branch . RESET . "?") ) {
         launch("git push " . $arg_remote . " --delete " . $arg_tracking_remote_branch, \$ret);
       }
     }
@@ -628,12 +757,12 @@ sub git_mergeIntoBranch {
   my $ret        = 99;
   my $merge_done = 0;
 
-  if (isResponseYes("Merge branch '$arg_branch_to_merge' into '$arg_branch_into'?") ) {
+  if (isResponseYes("Merge branch " . BOLD . $arg_branch_to_merge . RESET . " into " . BOLD . $arg_branch_into . RESET . "?") ) {
     launch("git checkout $arg_branch_into", \$ret);
 
     ## Exit if checkout fails
     if ( $ret ne 0 ) {
-      print("ERROR: checkout failed ! Aborted !\n");
+      printError("checkout failed ! Aborted !");
       exit(2);
     }
 
@@ -647,7 +776,7 @@ sub git_mergeIntoBranch {
 
     ## Exit if merge fails
     if ( $ret ne 0 ) {
-      print("ERROR: merge failed ! Aborted !\n");
+      printError("merge failed ! Aborted !");
       exit(2);
     }
     else {
@@ -655,12 +784,12 @@ sub git_mergeIntoBranch {
     }
 
     if ( $tracked_branch_into{"remote"} ne "" &&  $tracked_branch_into{"branch"} ne "" ) {
-      if (isResponseYes("Push '$arg_branch_into'?") ) {
+      if (isResponseYes("Push " . BOLD . $arg_branch_into . RESET . "?") ) {
         launch("git push", \$ret);
 
         ## Exit if push fails
         if ( $ret ne 0 ) {
-          print("ERROR: push failed ! Aborted !\n");
+          printError("push failed ! Aborted !");
           exit(2);
         }
       }
