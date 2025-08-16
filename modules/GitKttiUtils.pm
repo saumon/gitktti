@@ -141,17 +141,24 @@ sub launch {
 
   open (CMD, "$command 2>&1 |") or die "launch : ERROR !";
   my $output = "";
+  my @lines = ();
   while(my $ligne = <CMD>) {
-    $output .= $ligne;
     chomp($ligne);
     push(@out, $ligne);
+    push(@lines, $ligne);
   }
   close(CMD);
 
-  # Affichage de la sortie sans le dernier \n
-  if ($output ne "") {
-    $output =~ s/\n$//; # Supprimer le dernier \n
-    print($output);
+  # Affichage de la sortie avec indentation et couleur grise
+  if (@lines > 0) {
+    foreach my $line (@lines) {
+      print(DIM . "  │ " . $line . RESET . "\n");
+    }
+    # Supprimer le dernier \n pour ajouter le symbole de statut
+    print("\033[1A"); # Remonter d'une ligne
+    print("\033[K");  # Effacer la ligne
+    my $last_line = $lines[-1];
+    print(DIM . "  │ " . $last_line . RESET);
   }
 
   ## Get output state
@@ -159,14 +166,14 @@ sub launch {
 
   if ( $$ref_state ne 0 ) {
     # Ajouter le X rouge et le code d'erreur à la fin de la sortie
-    if ($output ne "") {
+    if (@lines > 0) {
       print(BRIGHT_RED . " ✗ (" . $$ref_state . ")" . RESET . "\n");
     } else {
       printError("Command failed with exit code: " . $$ref_state);
     }
   } else {
     # Ajouter le checkmark à la fin de la sortie
-    if ($output ne "") {
+    if (@lines > 0) {
       print(BRIGHT_GREEN . " ✔" . RESET . "\n");
     } else {
       printSuccess("Command executed successfully");
