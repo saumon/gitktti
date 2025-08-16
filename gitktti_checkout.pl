@@ -33,9 +33,13 @@ GetOptions ('help' => \$arg_help, 'filter=s' => \$arg_filter, 'delete' => \$arg_
 
 ## arg : --help
 if ( $arg_help ) {
-  print "usage:   perl gitktti_checkout.pl [--help] [--filter filter] [--delete]\n";
-  print "example: perl gitktti_checkout.pl --filter G401-750 --delete\n";
-  print "example: perl gitktti_checkout.pl -f EARTH -d\n";
+  GitKttiUtils::printSection("HELP - GitKtti Checkout");
+  print(GitKttiUtils::BRIGHT_WHITE . "Usage:" . GitKttiUtils::RESET . "\n");
+  print("   perl gitktti_checkout.pl [--help] [--filter filter] [--delete]\n\n");
+
+  GitKttiUtils::printSubSection("Examples");
+  GitKttiUtils::printCommand("perl gitktti_checkout.pl --filter G401-750 --delete");
+  GitKttiUtils::printCommand("perl gitktti_checkout.pl -f EARTH -d");
   exit(0);
 }
 
@@ -65,7 +69,7 @@ if ( @local_branches > 0 ) {
 
     ## The only reason to switch is when you want to delete your branch
     if ( $arg_delete ) {
-      print("WARNING: you already are on this branch, need to switch to another in order to delete it...\n");
+      GitKttiUtils::printWarning("you already are on this branch, need to switch to another in order to delete it...");
 
       if ( @local_dev_or_master_branches > 0 ) {
         ## Checkout develop or master branch
@@ -74,12 +78,12 @@ if ( @local_branches > 0 ) {
         );
       }
       else {
-        print("ERROR: No develop or master branches found !\n");
+        GitKttiUtils::printError("No develop or master branches found !");
         exit(1);
       }
     }
     else {
-      print("You already are on this branch!\n");
+      GitKttiUtils::printInfo("You already are on this branch!");
       exit(0);
     }
   }
@@ -98,7 +102,7 @@ if ( @local_branches > 0 ) {
   }
 }
 else {
-  print("Local branch not found !\n");
+  GitKttiUtils::printWarning("Local branch not found !");
 }
 
 ## Fetch...
@@ -117,10 +121,10 @@ if ( @remote_branches > 0 ) {
     GitKttiUtils::git_checkoutBranchNoConfirm($1);
   }
   else {
-    print("ERROR: unexpected error !\n");
+    GitKttiUtils::printError("unexpected error !");
     exit(2);
   }
 }
 else {
-  print("No remote branch found.\n");
+  GitKttiUtils::printInfo("No remote branch found.");
 }
