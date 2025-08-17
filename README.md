@@ -1,11 +1,11 @@
-# The `gitktti` project *- by R&Oslash;BU&trade;*
+# The `gitktti` project *- by saumon™*
 
 The `gitktti` scripts are provided to help developers safely use git flow. So powerful...
->**r&oslash;bu:** Yes so powerful!
+>**saumon:** Yes so powerful!
 
 ## Table of contents
 
-- [The `gitktti` project *- by RØBU™*](#the-gitktti-project---by-røbu)
+- [The `gitktti` project *- by saumon™*](#the-gitktti-project---by-saumon)
   - [Table of contents](#table-of-contents)
   - [Description](#description)
     - [Git flow principles](#git-flow-principles)
@@ -21,6 +21,7 @@ The `gitktti` scripts are provided to help developers safely use git flow. So po
     - [Alias descriptions](#alias-descriptions)
     - [Usage examples](#usage-examples)
   - [Releases](#releases)
+    - [Release `1.1.0` - 17/08/2025](#release-110---17082025)
     - [Release `1.0.4` - 16/08/2025](#release-104---16082025)
     - [Release `1.0.3` - 07/08/2025](#release-103---07082025)
     - [Release `1.0.2` - 28/06/2025](#release-102---28062025)
@@ -90,7 +91,8 @@ gitGraph
 
 ### Feature workflow
 
-Feature branches are used to develop new functionality. They are created from `develop` and merged back into `develop` when complete.
+Feature branches are used to develop new functionality. They are created from
+`develop` and merged back into `develop` when complete.
 
 ```mermaid
 ---
@@ -136,7 +138,8 @@ kfixend
 
 ### Hotfix workflow
 
-Hotfix branches are used for urgent production fixes. They branch from `master` and merge back to both `master` and `develop`.
+Hotfix branches are used for urgent production fixes. They branch from `master`
+and merge back to both `master` and `develop`.
 
 ```mermaid
 ---
@@ -183,7 +186,8 @@ kfixend
 
 ### Release workflow
 
-Release branches are used to prepare a new version. They branch from `develop`, allow for final adjustments, then merge to both `master` and `develop`.
+Release branches are used to prepare a new version. They branch from `develop`,
+allow for final adjustments, then merge to both `master` and `develop`.
 
 ```mermaid
 ---
@@ -230,7 +234,8 @@ kfixend
 
 ### Hotfix during release workflow
 
-Special case: when a release is in progress and a hotfix is needed, the hotfix must be merged into the release branch first.
+Special case: when a release is in progress and a hotfix is needed, the hotfix
+must be merged into the release branch first.
 
 ```mermaid
 ---
@@ -343,6 +348,11 @@ kco                             # Switches to another branch
 
 ## Releases
 
+### Release `1.1.0` - 17/08/2025
+
+- NEW FEATURES:
+  - **gitkkti:** changed branches naming convention
+
 ### Release `1.0.4` - 16/08/2025
 
 - NEW FEATURES:
@@ -356,7 +366,8 @@ kco                             # Switches to another branch
 ### Release `1.0.2` - 28/06/2025
 
 - NEW FEATURES:
-  - **README:** added detailed workflows for feature, hotfix, release, and hotfix during release
+  - **README:** added detailed workflows for feature, hotfix, release, and hotfix
+    during release
 
 ### Release `1.0.1` - 25/03/2023
 
