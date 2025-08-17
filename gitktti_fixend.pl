@@ -1,8 +1,4 @@
 #! /usr/bin/perl
-##############################################################################
-## by ROBU
-##############################################################################
-
 use strict;
 use warnings;
 use File::Basename; ## For using 'basename'
@@ -15,11 +11,11 @@ use constant MODE_DEVELOP => "develop";
 use constant MODE_RELEASE => "release";
 use constant MODE_FEATURE => "feature";
 
-use constant REGEX_HOTFIX  => '^(hotfix)_(.+)$';
+use constant REGEX_HOTFIX  => '^(hotfix)/(.+)$';
 use constant REGEX_DEVELOP => '^(dev|develop)$';
 use constant REGEX_MASTER  => '^(master|main)$';
-use constant REGEX_RELEASE => '^(release)_(.+)$';
-use constant REGEX_FEATURE => '^(feature)_(.+)$';
+use constant REGEX_RELEASE => '^(release)/(.+)$';
+use constant REGEX_FEATURE => '^(feature)/(.+)$';
 
 GitKttiUtils::showVersion();
 

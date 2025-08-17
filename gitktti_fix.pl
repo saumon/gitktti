@@ -1,8 +1,4 @@
 #! /usr/bin/perl
-##############################################################################
-## by ROBU
-##############################################################################
-
 use strict;
 use warnings;
 use POSIX; ## For using 'strftime'
@@ -12,11 +8,11 @@ use constant MODE_HOTFIX  => "hotfix";
 use constant MODE_FEATURE => "feature";
 use constant MODE_RELEASE => "release";
 
-use constant REGEX_HOTFIX  => '^(hotfix)_(.+)$';
+use constant REGEX_HOTFIX  => '^(hotfix)/(.+)$';
 use constant REGEX_DEVELOP => '^(dev|develop)$';
 use constant REGEX_MASTER  => '^(master|main)$';
-use constant REGEX_RELEASE => '^(release)_(.+)$';
-use constant REGEX_FEATURE => '^(feature)_(.+)$';
+use constant REGEX_RELEASE => '^(release)/(.+)$';
+use constant REGEX_FEATURE => '^(feature)/(.+)$';
 
 GitKttiUtils::showVersion();
 
@@ -131,7 +127,7 @@ if ( $arg_zeroprefix ) {
   $prefix_branch = "";
 }
 else {
-  $prefix_branch = $mode . "_";
+  $prefix_branch = $mode . "/";
 }
 
 ## Get current branch...
@@ -139,7 +135,7 @@ $current_branch = GitKttiUtils::git_getCurrentBranch(\$ret);
 
 ## mode : hotfix
 if ( $mode eq MODE_HOTFIX ) {
-  ## Check if we are on the right branch (master, hotfix_xxx, release_xxx)
+  ## Check if we are on the right branch (master, hotfix/xxx, release/xxx)
   if($current_branch =~ /${\(REGEX_MASTER)}/ || $current_branch =~ /${\(REGEX_HOTFIX)}/  || $current_branch =~ /${\(REGEX_RELEASE)}/ ) {
 
     ## hotfix on hotfix ? strange but why not motherfucker
@@ -154,7 +150,7 @@ if ( $mode eq MODE_HOTFIX ) {
     $new_branch = $prefix_branch . $suffix_branch;
   }
   else {
-    GitKttiUtils::printError("not on master/hotfix/release branch !");
+    GitKttiUtils::printError("not on master/release branch !");
     exit(1);
   }
 }
@@ -203,9 +199,9 @@ elsif ( $mode eq MODE_RELEASE ) {
       $lasttag_patch = $3;
 
       $new_branch = GitKttiUtils::getSelectResponse("Please select a release name (last tag is [$lasttag]) :",
-          $mode . "_" . ($lasttag_maj+1) . "." . "0"              . "." . "0"                . "|next maj release",
-          $mode . "_" . $lasttag_maj     . "." . ($lasttag_min+1) . "." . "0"                . "|next min release",
-          $mode . "_" . $lasttag_maj     . "." . $lasttag_min     . "." . ($lasttag_patch+1) . "|next patch release",
+          $mode . "/" . ($lasttag_maj+1) . "." . "0"              . "." . "0"                . "|next maj release",
+          $mode . "/" . $lasttag_maj     . "." . ($lasttag_min+1) . "." . "0"                . "|next min release",
+          $mode . "/" . $lasttag_maj     . "." . $lasttag_min     . "." . ($lasttag_patch+1) . "|next patch release",
           "|none of them ! (another name)");
     }
     else {

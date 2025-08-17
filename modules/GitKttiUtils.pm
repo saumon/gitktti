@@ -1,13 +1,9 @@
 #! /usr/bin/perl
-##############################################################################
-## by ROBU
-##############################################################################
-
 package GitKttiUtils;
 use strict;
 use warnings;
 use POSIX; ## For using 'strftime'
-use constant GIT_KTTI_VERSION => "1.0.4";
+use constant GIT_KTTI_VERSION => "1.1.0";
 
 # Codes de couleurs ANSI
 use constant {
@@ -42,8 +38,7 @@ use constant {
 };
 
 sub showVersion {
-  print(BRIGHT_CYAN . BOLD . "🚀 gitktti " . BRIGHT_WHITE . "v" . GIT_KTTI_VERSION . RESET . "\n");
-  print(DIM . "   Git flow made powerful by RØBU™" . RESET . "\n\n");
+  print(BRIGHT_MAGENTA . BOLD . "🚀 gitktti " . BRIGHT_WHITE . "v" . GIT_KTTI_VERSION . RESET . " " . DIM . "by saumon™" . RESET . "\n\n");
 }
 
 # Fonctions d'affichage coloré
@@ -332,7 +327,7 @@ sub git_getTrackedRemoteBranch {
 
   my @remotebranch = launch('git rev-parse --abbrev-ref --symbolic-full-name @{u}', $ref_ret);
 
-  if(@remotebranch >= 1 && $remotebranch[0] =~ /^(.+)\/(.+)$/) {
+  if($$ref_ret == 0 && @remotebranch >= 1 && $remotebranch[0] =~ /^(\w+)\/(.+)$/) {
     $index_remotebranch{"remote"} = $1;
     $index_remotebranch{"branch"} = $2;
   }
