@@ -129,7 +129,7 @@ gitGraph
 
 ```bash
 # Create feature branch
-kfeat -t EARTH-1234
+kfeat -n feat/new-login
 # or
 kfix --mode feature --name new-login
 
@@ -177,7 +177,7 @@ gitGraph
 
 ```bash
 # Create hotfix branch (from master)
-kfix -t PB-5678
+kfix -n critical-bug
 # or
 kfix --name critical-bug
 
@@ -275,7 +275,7 @@ gitGraph
 
 ```bash
 # Create hotfix as usual
-kfix -t URGENT-123
+kfix
 
 # When finalizing, the script will detect the release branch
 # and automatically merge hotfix into release instead of develop
@@ -324,12 +324,10 @@ alias kmove='....../gitktti_move.pl'
 
 ```bash
 # Start working on a new feature
-kfeat -t JIRA-1234              # Creates feature/JIRA-1234 from develop
 kfeat --name user-authentication # Creates feature/user-authentication
 
 # Create a hotfix for production
-kfix -t BUG-5678                # Creates hotfix/BUG-5678 from master
-kfix --name critical-security-fix
+kfix --name critical-security-fix # Creates hotfix/critical-security-fix from master
 
 # Prepare a new release
 kreal                           # Creates release/vX.Y.Z from develop
@@ -359,6 +357,7 @@ kmove                           # Interactive branch renaming
 
 - NEW FEATURES:
   - **kmove:** new script for renaming branches
+  - **kfeat:** removed --tag option
 
 ### Release `1.1.0` - 17/08/2025
 

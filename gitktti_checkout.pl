@@ -34,8 +34,8 @@ if ( $arg_help ) {
   print("   perl gitktti_checkout.pl [--help] [--filter filter] [--delete]\n\n");
 
   GitKttiUtils::printSubSection("Examples");
-  GitKttiUtils::printCommand("perl gitktti_checkout.pl --filter G401-750 --delete");
-  GitKttiUtils::printCommand("perl gitktti_checkout.pl -f EARTH -d");
+  GitKttiUtils::printCommand("perl gitktti_checkout.pl --filter badbranch --delete");
+  GitKttiUtils::printCommand("perl gitktti_checkout.pl -f badbranch -d");
   exit(0);
 }
 
