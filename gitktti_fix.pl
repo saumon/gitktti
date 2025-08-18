@@ -26,7 +26,6 @@ my $prefix_branch  = "";
 my $suffix_branch  = "";
 my $current_branch = "";
 my $arg_help       = "";
-my $arg_tag        = "";
 my $arg_name       = "";
 my $arg_mode       = "";
 my $arg_prune      = "";
@@ -34,19 +33,19 @@ my $arg_zeroprefix = "";
 my $mode           = MODE_HOTFIX;
 
 ## Args reading...
-GetOptions ('help' => \$arg_help, 'tag=s' => \$arg_tag, 'name=s' => \$arg_name, 'mode=s' => \$arg_mode, 'prune' => \$arg_prune, 'zeroprefix' => \$arg_zeroprefix);
+GetOptions ('help' => \$arg_help, 'name=s' => \$arg_name, 'mode=s' => \$arg_mode, 'prune' => \$arg_prune, 'zeroprefix' => \$arg_zeroprefix);
 
 ## arg : --help
 if ( $arg_help ) {
   GitKttiUtils::printSection("HELP - GitKtti Fix");
   print(GitKttiUtils::BRIGHT_WHITE . "Usage:" . GitKttiUtils::RESET . "\n");
-  print("   perl gitktti_fix.pl [--help] [--tag JIRATAG] [--name name] [--mode (hotfix|feature|release)] [--prune] [--zeroprefix]\n\n");
+  print("   perl gitktti_fix.pl [--help] [--name name] [--mode (hotfix|feature|release)] [--prune] [--zeroprefix]\n\n");
 
   GitKttiUtils::printSubSection("Examples");
-  GitKttiUtils::printCommand("perl gitktti_fix.pl -t PB-1233 --zeroprefix");
+  GitKttiUtils::printCommand("perl gitktti_fix.pl --name bug-123 --zeroprefix");
   GitKttiUtils::printCommand("perl gitktti_fix.pl -n coucou");
   GitKttiUtils::printCommand("perl gitktti_fix.pl -m feature");
-  GitKttiUtils::printCommand("perl gitktti_fix.pl -m feature -t EARTH-1234 --z");
+  GitKttiUtils::printCommand("perl gitktti_fix.pl -m feature -n f-toto --z");
   GitKttiUtils::printCommand("perl gitktti_fix.pl -m feature -n coucou");
   GitKttiUtils::printCommand("perl gitktti_fix.pl -m release");
   GitKttiUtils::printCommand("perl gitktti_fix.pl --prune");
@@ -87,17 +86,7 @@ if ( $arg_prune ) {
   exit(0);
 }
 
-## arg : --tag
-if ( $arg_tag ) {
-
-  if($arg_tag !~ /^(EARTH|MOON|ISS|HALLEY|PB|MOBILE|FRONT)\-\d{1,6}$/) {
-    GitKttiUtils::printError("tag must be like 'EARTH-XXX' or 'MOON-XXX' or 'ISS-XXX' or 'HALLEY-XXX' or 'PB-XXX' or 'MOBILE-XXX' or 'FRONT-XXX' (ex: EARTH-1234) !");
-    exit(1);
-  }
-
-  $suffix_branch = $arg_tag;
-}
-elsif ( $arg_name ) {
+if ( $arg_name ) {
 
   if($arg_name !~ /^[\w\-]+$/) {
     GitKttiUtils::printError("invalid name !");
@@ -167,7 +156,7 @@ if ( $current_branch =~ /${\(REGEX_DEVELOP)}/ || $current_branch =~ /${\(REGEX_F
       }
     }
 
-    if ( !$arg_tag && !$arg_name ) {
+    if ( !$arg_name ) {
       if ( !GitKttiUtils::isResponseYes("By default, you can use [" . $prefix_branch . "AAAAMMJJ_HHMISS]. Do you want to use it?") ) {
         $suffix_branch = "";
       }

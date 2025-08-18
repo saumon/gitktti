@@ -21,6 +21,7 @@ The `gitktti` scripts are provided to help developers safely use git flow. So po
     - [Alias descriptions](#alias-descriptions)
     - [Usage examples](#usage-examples)
   - [Releases](#releases)
+    - [Release `1.2.0` - 18/08/2025](#release-120---18082025)
     - [Release `1.1.0` - 17/08/2025](#release-110---17082025)
     - [Release `1.0.4` - 16/08/2025](#release-104---16082025)
     - [Release `1.0.3` - 07/08/2025](#release-103---07082025)
@@ -128,7 +129,7 @@ gitGraph
 
 ```bash
 # Create feature branch
-kfeat -t EARTH-1234
+kfeat -n feat/new-login
 # or
 kfix --mode feature --name new-login
 
@@ -176,7 +177,7 @@ gitGraph
 
 ```bash
 # Create hotfix branch (from master)
-kfix -t PB-5678
+kfix -n critical-bug
 # or
 kfix --name critical-bug
 
@@ -274,7 +275,7 @@ gitGraph
 
 ```bash
 # Create hotfix as usual
-kfix -t URGENT-123
+kfix
 
 # When finalizing, the script will detect the release branch
 # and automatically merge hotfix into release instead of develop
@@ -303,6 +304,7 @@ alias kfix='......./gitktti_fix.pl'
 alias kfixend='..../gitktti_fixend.pl'
 alias ktag='......./gitktti_tag.pl'
 alias kco='......../gitktti_checkout.pl'
+alias kmove='....../gitktti_move.pl'
 ```
 
 ### Alias descriptions
@@ -316,17 +318,16 @@ alias kco='......../gitktti_checkout.pl'
 | `kfixend` | **Finalize current branch** | Merges the current branch to appropriate target(s) and creates tags if needed |
 | `ktag` | **Create/manage tags** | Creates or manages version tags on the repository |
 | `kco` | **Smart checkout** | Intelligent branch checkout with Git flow awareness |
+| `kmove` | **Rename branch** | Renames current branch locally and remotely |
 
 ### Usage examples
 
 ```bash
 # Start working on a new feature
-kfeat -t JIRA-1234              # Creates feature/JIRA-1234 from develop
 kfeat --name user-authentication # Creates feature/user-authentication
 
 # Create a hotfix for production
-kfix -t BUG-5678                # Creates hotfix/BUG-5678 from master
-kfix --name critical-security-fix
+kfix --name critical-security-fix # Creates hotfix/critical-security-fix from master
 
 # Prepare a new release
 kreal                           # Creates release/vX.Y.Z from develop
@@ -342,11 +343,21 @@ ktag                            # Creates and pushes tag
 
 # Smart branch switching
 kco                             # Switches to another branch
+
+# Rename current branch
+kmove --name feature/new-name   # Renames current branch locally and remotely
+kmove                           # Interactive branch renaming
 ```
 
 ***
 
 ## Releases
+
+### Release `1.2.0` - 18/08/2025
+
+- NEW FEATURES:
+  - **kmove:** new script for renaming branches
+  - **kfeat:** removed --tag option
 
 ### Release `1.1.0` - 17/08/2025
 
