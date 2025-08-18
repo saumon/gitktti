@@ -21,6 +21,7 @@ The `gitktti` scripts are provided to help developers safely use git flow. So po
     - [Alias descriptions](#alias-descriptions)
     - [Usage examples](#usage-examples)
   - [Releases](#releases)
+    - [Release `1.2.0` - 18/08/2025](#release-120---18082025)
     - [Release `1.1.0` - 17/08/2025](#release-110---17082025)
     - [Release `1.0.4` - 16/08/2025](#release-104---16082025)
     - [Release `1.0.3` - 07/08/2025](#release-103---07082025)
@@ -303,6 +304,7 @@ alias kfix='......./gitktti_fix.pl'
 alias kfixend='..../gitktti_fixend.pl'
 alias ktag='......./gitktti_tag.pl'
 alias kco='......../gitktti_checkout.pl'
+alias kmove='....../gitktti_move.pl'
 ```
 
 ### Alias descriptions
@@ -316,6 +318,7 @@ alias kco='......../gitktti_checkout.pl'
 | `kfixend` | **Finalize current branch** | Merges the current branch to appropriate target(s) and creates tags if needed |
 | `ktag` | **Create/manage tags** | Creates or manages version tags on the repository |
 | `kco` | **Smart checkout** | Intelligent branch checkout with Git flow awareness |
+| `kmove` | **Rename branch** | Renames current branch locally and remotely |
 
 ### Usage examples
 
@@ -342,11 +345,20 @@ ktag                            # Creates and pushes tag
 
 # Smart branch switching
 kco                             # Switches to another branch
+
+# Rename current branch
+kmove --name feature/new-name   # Renames current branch locally and remotely
+kmove                           # Interactive branch renaming
 ```
 
 ***
 
 ## Releases
+
+### Release `1.2.0` - 18/08/2025
+
+- NEW FEATURES:
+  - **kmove:** new script for renaming branches
 
 ### Release `1.1.0` - 17/08/2025
 

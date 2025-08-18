@@ -3,7 +3,7 @@ package GitKttiUtils;
 use strict;
 use warnings;
 use POSIX; ## For using 'strftime'
-use constant GIT_KTTI_VERSION => "1.1.0";
+use constant GIT_KTTI_VERSION => "1.2.0";
 
 # Codes de couleurs ANSI
 use constant {
@@ -164,14 +164,14 @@ sub launch {
     if (@lines > 0) {
       print(BRIGHT_RED . " ✗ (" . $$ref_state . ")" . RESET . "\n");
     } else {
-      printError("Command failed with exit code: " . $$ref_state);
+      print(DIM .  "  │ " . BRIGHT_RED . "Command failed " . RESET . BRIGHT_RED . "✗ (" . $$ref_state . ")" . RESET . "\n");
     }
   } else {
     # Ajouter le checkmark à la fin de la sortie
     if (@lines > 0) {
       print(BRIGHT_GREEN . " ✔" . RESET . "\n");
     } else {
-      printSuccess("Command executed successfully");
+      print(DIM  . "  │ " . BRIGHT_GREEN . "Command executed successfully " . RESET . BRIGHT_GREEN . "✔" . RESET . "\n");
     }
   }
 
