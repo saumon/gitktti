@@ -1,5 +1,11 @@
 # The `gitktti` project *- by saumon™*
 
+<h1 align="left">
+  <a href="http://saumon.github.io/gitktti/" target="_blank">
+    <img src="images/gitktti_logo.png" alt="GitKtti™ Logo - Click to visit landing page" width="250"/>
+  </a>
+</h1>
+
 The `gitktti` scripts are provided to help developers safely use git flow. So powerful...
 >**saumon:** Yes so powerful!
 
@@ -21,6 +27,7 @@ The `gitktti` scripts are provided to help developers safely use git flow. So po
     - [Alias descriptions](#alias-descriptions)
     - [Usage examples](#usage-examples)
   - [Releases](#releases)
+    - [Release `1.3.1` - 24/08/2025](#release-131---24082025)
     - [Release `1.3.0` - 24/08/2025](#release-130---24082025)
     - [Release `1.2.0` - 18/08/2025](#release-120---18082025)
     - [Release `1.1.0` - 17/08/2025](#release-110---17082025)
@@ -361,6 +368,11 @@ kdel                            # Interactive branch deletion
 
 ## Releases
 
+### Release `1.3.1` - 24/08/2025
+
+- NEW FEATURES:
+  - **gitkkti:** added landing page
+
 ### Release `1.3.0` - 24/08/2025
 
 - NEW FEATURES:
@@ -401,4 +413,4 @@ kdel                            # Interactive branch deletion
 ### Release `1.0.0` - 23/03/2023
 
 - NEW FEATURES:
-  - **gitktti:** forked from top secret project: `git_catti (v6.14)`
+  - **gitktti:** first release
