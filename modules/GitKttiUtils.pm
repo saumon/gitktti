@@ -3,7 +3,7 @@ package GitKttiUtils;
 use strict;
 use warnings;
 use POSIX; ## For using 'strftime'
-use constant GIT_KTTI_VERSION => "1.2.0";
+use constant GIT_KTTI_VERSION => "1.3.0";
 
 # Codes de couleurs ANSI
 use constant {
@@ -531,6 +531,11 @@ sub git_deleteLocalBranch {
   }
 
   return $done;
+}
+
+sub git_getLocalBranches {
+  my $ref_ret = $_[0];
+  return (launch("git branch | awk -F ' +' '! /\\(no branch\\)/ {print \$2}'", $ref_ret));
 }
 
 sub git_getLocalBranchesFilter {
