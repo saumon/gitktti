@@ -3,7 +3,7 @@ package GitKttiUtils;
 use strict;
 use warnings;
 use POSIX; ## For using 'strftime'
-use constant GIT_KTTI_VERSION => "1.3.1";
+use constant GIT_KTTI_VERSION => "1.3.2";
 
 # Codes de couleurs ANSI
 use constant {
