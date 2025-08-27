@@ -27,6 +27,7 @@ The `gitktti` scripts are provided to help developers safely use git flow. So po
     - [Alias descriptions](#alias-descriptions)
     - [Usage examples](#usage-examples)
   - [Releases](#releases)
+    - [Release `1.3.3` - 27/08/2025](#release-133---27082025)
     - [Release `1.3.2` - 25/08/2025](#release-132---25082025)
     - [Release `1.3.1` - 24/08/2025](#release-131---24082025)
     - [Release `1.3.0` - 24/08/2025](#release-130---24082025)
@@ -368,6 +369,11 @@ kdel                            # Interactive branch deletion
 ***
 
 ## Releases
+
+### Release `1.3.3` - 27/08/2025
+
+- NEW FEATURES:
+  - **gitkkti:** gitkkti logo is now displayed in the terminal
 
 ### Release `1.3.2` - 25/08/2025
 
