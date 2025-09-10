@@ -1,9 +1,59 @@
-#! /usr/bin/perl
-package GitKttiUtils;
+package App::GitKtti;
+
 use strict;
 use warnings;
-use POSIX; ## For using 'strftime'
-use constant GIT_KTTI_VERSION => "1.3.3";
+use POSIX qw(strftime);
+use Cwd qw(getcwd);
+
+our $VERSION = '2.0.0';
+
+=head1 NAME
+
+App::GitKtti - Git flow helper scripts for safe branch management
+
+=head1 SYNOPSIS
+
+    use App::GitKtti;
+    
+    # Use the command-line tools:
+    # gitktti-checkout
+    # gitktti-delete
+    # gitktti-fix
+    # gitktti-fixend
+    # gitktti-move
+    # gitktti-tag
+    # gitktti-tests
+
+=head1 DESCRIPTION
+
+The gitktti scripts are provided to help developers safely use git flow.
+This module provides a collection of tools for managing git branches
+following git-flow methodology.
+
+=head1 FEATURES
+
+=over 4
+
+=item * Safe branch operations with validation
+
+=item * Colorized output for better readability
+
+=item * Support for feature, hotfix, and release workflows
+
+=item * Automatic branch cleanup and management
+
+=back
+
+=head1 AUTHOR
+
+saumon <shrekrobu@gmail.com>
+
+=head1 LICENSE
+
+This library is free software; you can redistribute it and/or modify
+it under the same terms as Perl itself.
+
+=cut
 
 # Codes de couleurs ANSI
 use constant {
@@ -39,7 +89,7 @@ use constant {
 
 sub showVersion {
   showLogo();
-  print(BRIGHT_MAGENTA . BOLD . "🚀 gitktti " . BRIGHT_WHITE . "v" . GIT_KTTI_VERSION . RESET . " " . DIM . "by saumon™" . RESET . "\n\n");
+  print(BRIGHT_MAGENTA . BOLD . "🚀 gitktti " . BRIGHT_WHITE . "v" . $VERSION . RESET . " " . DIM . "by saumon™" . RESET . "\n\n");
 }
 
 # Fonctions d'affichage coloré
@@ -135,15 +185,15 @@ sub launch {
 
   printCommand($command);
 
-  open (CMD, "$command 2>&1 |") or die "launch : ERROR !";
+  open my $cmd_fh, '-|', "$command 2>&1" or die "launch : ERROR !";
   my $output = "";
   my @lines = ();
-  while(my $ligne = <CMD>) {
+  while(my $ligne = <$cmd_fh>) {
     chomp($ligne);
     push(@out, $ligne);
     push(@lines, $ligne);
   }
-  close(CMD);
+  close($cmd_fh);
 
   # Affichage de la sortie avec indentation et couleur grise
   if (@lines > 0) {

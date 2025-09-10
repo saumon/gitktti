@@ -1,0 +1,54 @@
+# Changes file for App-GitKtti
+
+2.0.0  2025-09-10
+    - MAJOR MODERNIZATION RELEASE - CPAN READY!
+    - BREAKING CHANGES: Complete architecture modernization for CPAN distribution
+    - Scripts renamed with gitktti- prefix (e.g., gitktti-checkout)
+    - Module restructured from GitKttiUtils to App::GitKtti
+    - Installation now via standard Perl/CPAN methods
+    - CPAN installable with 'cpan App::GitKtti'
+    - Proper Makefile.PL with dependencies and metadata
+    - Professional test suite in t/ directory
+    - Installation script (install.sh) with multiple options
+    - Modern documentation with POD format
+    - MANIFEST and META.yml files for distribution
+    - FindBin support for proper library loading
+    - All scripts use modern Perl practices
+    - Better error handling and user feedback
+    - Consistent command-line interface across all tools
+    - Improved help system with --help for all commands
+    - Enhanced diagnostic tool (gitktti-tests)
+
+1.3.3  2025-08-27
+    - NEW FEATURES: gitkkti logo is now displayed in the terminal
+
+1.3.2  2025-08-25
+    - NEW FEATURES: docs reorganization
+
+1.3.1  2025-08-24
+    - NEW FEATURES: gitkkti added landing page
+
+1.3.0  2025-08-24
+    - NEW FEATURES: kdel new script for deleting branches
+
+1.2.0  2025-08-18
+    - NEW FEATURES: kmove new script for renaming branches
+    - NEW FEATURES: kfeat removed --tag option
+
+1.1.0  2025-08-17
+    - NEW FEATURES: gitkkti changed branches naming convention
+
+1.0.4  2025-08-16
+    - NEW FEATURES: gitkkti console output modernization
+
+1.0.3  2025-08-07
+    - NEW FEATURES: kco command is now less strict when using --delete arg
+
+1.0.2  2025-06-28
+    - NEW FEATURES: README added detailed workflows for feature, hotfix, release, and hotfix during release
+
+1.0.1  2023-03-25
+    - NEW FEATURES: kprune added possibility to delete local branches
+
+1.0.0  2023-03-23
+    - NEW FEATURES: gitktti first release
