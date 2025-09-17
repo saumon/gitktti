@@ -1,0 +1,65 @@
+# Build and installation artifacts
+Makefile
+Makefile.old
+MYMETA.json
+MYMETA.yml
+pm_to_blib
+pm_to_blib.ts
+blib/
+blibdirs.ts
+*.bs
+*.def
+*.exp
+*.x
+*.a
+*.o
+*.so
+perlmain.c
+so_locations
+tmon.out
+mon.out
+core
+core.*
+libGitKtti.def
+
+# Distribution archives
+App-GitKtti-*
+*.tar.gz
+*.tar.bz2
+*.tar.xz
+
+# Backup files
+*~
+*.bak
+*.orig
+
+# OS specific files
+.DS_Store
+Thumbs.db
+
+# Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Temporary files
+*.tmp
+*.temp
+
+# Perl specific
+cover_db/
+nytprof.out
+nytprof/
+
+# Testing
+prove_state
+
+# Development
+.build/
+_build/
+_Inline/
+
+# Local configuration
+local/
+.carton/

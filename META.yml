@@ -1,0 +1,27 @@
+---
+name: App-GitKtti
+version: 2.0.0
+abstract: Git flow helper scripts for safe branch management
+author:
+  - 'saumon <shrekrobu@gmail.com>'
+license: perl_5
+distribution_type: module
+configure_requires:
+  ExtUtils::MakeMaker: 6.64
+build_requires:
+  Test::More: 0.98
+requires:
+  POSIX: 0
+  File::Basename: 0
+  Getopt::Long: 0
+  FindBin: 0
+  Cwd: 0
+  perl: 5.014
+no_index:
+  directory:
+    - t
+    - docs
+resources:
+  homepage: http://saumon.github.io/gitktti/
+  repository: https://github.com/saumon/gitktti.git
+  bugtracker: https://github.com/saumon/gitktti/issues
