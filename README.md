@@ -6,40 +6,50 @@
 
 # The `gitktti` project *- by saumon™*
 
-The `gitktti` scripts are provided to help developers safely use git flow. So powerful...
+[![CPAN version](https://badge.fury.io/pl/App-GitKtti.svg)](https://metacpan.org/pod/App::GitKtti)
+[![License](https://img.shields.io/badge/license-Perl_5-blue.svg)](LICENSE)
+
+The `gitktti` scripts are provided to help developers safely use git flow. So powerful... 🚀
 >**saumon:** Yes so powerful!
 
-## Table of contents
+## 📋 Table of contents
 
 - [The `gitktti` project *- by saumon™*](#the-gitktti-project---by-saumon)
-  - [Table of contents](#table-of-contents)
-  - [Description](#description)
+  - [📋 Table of contents](#-table-of-contents)
+  - [📖 Description](#-description)
     - [Git flow principles](#git-flow-principles)
     - [Branch types](#branch-types)
-  - [Detailed workflows](#detailed-workflows)
+  - [🔎 Detailed workflows](#-detailed-workflows)
     - [Feature workflow](#feature-workflow)
     - [Hotfix workflow](#hotfix-workflow)
     - [Release workflow](#release-workflow)
     - [Hotfix during release workflow](#hotfix-during-release-workflow)
-  - [Installation](#installation)
-    - [Environment setup](#environment-setup)
-    - [Recommended aliases](#recommended-aliases)
+  - [📦 Installation](#-installation)
+    - [From CPAN (Recommended)](#from-cpan-recommended)
+    - [From Source](#from-source)
+    - [Manual Installation](#manual-installation)
+  - [🗑️ Uninstallation](#️-uninstallation)
+  - [⚒️ Available Commands](#️-available-commands)
+  - [🐰 Quick Start](#-quick-start)
+  - [⭐️ Recommended aliases](#️-recommended-aliases)
     - [Alias descriptions](#alias-descriptions)
     - [Usage examples](#usage-examples)
-  - [Releases](#releases)
+  - [🚀 CPAN Distribution Guide](#-cpan-distribution-guide)
+    - [Prerequisites](#prerequisites)
+    - [Command Line Upload](#command-line-upload)
+      - [Step 1: Install Upload Tool](#step-1-install-upload-tool)
+      - [Step 2: Configure PAUSE Credentials](#step-2-configure-pause-credentials)
+      - [Step 3: Prepare Distribution](#step-3-prepare-distribution)
+      - [Step 4: Upload to CPAN](#step-4-upload-to-cpan)
+      - [What Happens Next](#what-happens-next)
+      - [Complete Example](#complete-example)
+  - [📋 Recent Releases](#-recent-releases)
+    - [Release `2.0.0` - 10/09/2025 🆕](#release-200---10092025-)
     - [Release `1.3.3` - 27/08/2025](#release-133---27082025)
     - [Release `1.3.2` - 25/08/2025](#release-132---25082025)
     - [Release `1.3.1` - 24/08/2025](#release-131---24082025)
-    - [Release `1.3.0` - 24/08/2025](#release-130---24082025)
-    - [Release `1.2.0` - 18/08/2025](#release-120---18082025)
-    - [Release `1.1.0` - 17/08/2025](#release-110---17082025)
-    - [Release `1.0.4` - 16/08/2025](#release-104---16082025)
-    - [Release `1.0.3` - 07/08/2025](#release-103---07082025)
-    - [Release `1.0.2` - 28/06/2025](#release-102---28062025)
-    - [Release `1.0.1` - 25/03/2023](#release-101---25032023)
-    - [Release `1.0.0` - 23/03/2023](#release-100---23032023)
 
-## Description
+## 📖 Description
 
 Git flow is a branching methodology that organizes development around two main branches:
 
@@ -98,7 +108,7 @@ gitGraph
 - **`release/*`** : preparation of a new version (branched from `develop`)
 - **`hotfix/*`** : urgent fixes in production (branched from `master`)
 
-## Detailed workflows
+## 🔎 Detailed workflows
 
 ### Feature workflow
 
@@ -292,30 +302,100 @@ kfix
 kfixend
 ```
 
-## Installation
+## 📦 Installation
 
-### Environment setup
-
-You need to set the following environment variable:
+### From CPAN (Recommended)
 
 ```bash
-export PERL5LIB=..../gitktti/modules
+# Preferred method
+cpanm App::GitKtti
+
+# Alternative
+cpan App::GitKtti
 ```
 
-### Recommended aliases
-
-I recommend creating these aliases for easier usage:
+### From Source
 
 ```bash
-alias kfeat='....../gitktti_fix.pl --mode feature'
-alias kreal='....../gitktti_fix.pl --mode release'
-alias kprune='...../gitktti_fix.pl --prune'
-alias kfix='......./gitktti_fix.pl'
-alias kfixend='..../gitktti_fixend.pl'
-alias ktag='......./gitktti_tag.pl'
-alias kco='......../gitktti_checkout.pl'
-alias kmove='....../gitktti_move.pl'
-alias kdel='......./gitktti_delete.pl'
+git clone https://github.com/saumon/gitktti.git
+cd gitktti
+./install.sh
+```
+
+### Manual Installation
+
+```bash
+perl Makefile.PL
+make
+make test
+make install
+```
+
+## 🗑️ Uninstallation
+
+To properly uninstall GitKtti based on how it was installed:
+
+```bash
+git clone https://github.com/saumon/gitktti.git
+cd gitktti
+./uninstall.sh
+```
+
+The uninstall script will guide you through removing GitKtti cleanly:
+
+- **Local installation**: Simple directory removal guidance
+- **System-wide**: Automatic detection and removal of installed files
+- **~/perl5**: Clean removal from local Perl library
+- **CPAN**: Uses `cpan -U App::GitKtti` or falls back to manual method
+
+## ⚒️ Available Commands
+
+After installation, the following commands are available:
+
+- **`gitktti-checkout`** - Switch between branches safely
+- **`gitktti-delete`** - Delete branches (local and remote)
+- **`gitktti-fix`** - Start a hotfix branch
+- **`gitktti-fixend`** - Finish a hotfix branch
+- **`gitktti-move`** - Rename branches
+- **`gitktti-tag`** - Create and push tags
+- **`gitktti-tests`** - Run diagnostic tests
+
+Each command supports `--help` for detailed usage information.
+
+## 🐰 Quick Start
+
+```bash
+# Run diagnostics
+gitktti-tests
+
+# Switch branches
+gitktti-checkout --filter feature
+
+# Start a hotfix
+gitktti-fix --name critical-bug
+
+# Create a tag
+gitktti-tag --name v1.2.0
+
+# Get help for any command
+gitktti-checkout --help
+```
+
+## ⭐️ Recommended aliases
+
+For users who prefer shorter commands, you can create these aliases:
+
+```bash
+alias kfeat='gitktti-fix --mode feature'
+alias kreal='gitktti-fix --mode release'
+alias kprune='gitktti-fix --prune'
+alias kfix='gitktti-fix'
+alias kfixend='gitktti-fixend'
+alias ktag='gitktti-tag'
+alias kco='gitktti-checkout'
+alias kmove='gitktti-move'
+alias kdel='gitktti-delete'
+alias ktest='gitktti-tests'
 ```
 
 ### Alias descriptions
@@ -333,6 +413,8 @@ alias kdel='......./gitktti_delete.pl'
 | `kdel` | **Delete branch** | Deletes a local branch and its remote counterpart safely |
 
 ### Usage examples
+
+**With aliases (modern):**
 
 ```bash
 # Start working on a new feature
@@ -364,65 +446,143 @@ kmove                           # Interactive branch renaming
 kdel --name feature/old-feature # Deletes specified branch locally and remotely
 kdel --force                    # Force delete with interactive selection
 kdel                            # Interactive branch deletion
+
+# Run tests
+ktest                           # Run diagnostic tests
 ```
+
+**Without aliases (full command names):**
+
+```bash
+# Same functionality with full command names
+gitktti-fix --mode feature --name user-authentication
+gitktti-fix --name critical-security-fix
+gitktti-fix --mode release
+gitktti-fixend
+gitktti-fix --prune
+gitktti-tag
+gitktti-checkout
+gitktti-move --name feature/new-name
+gitktti-delete --name feature/old-feature
+gitktti-tests
+```
+
+## 🚀 CPAN Distribution Guide
+
+This section is for maintainers who want to upload new versions of GitKtti to CPAN.
+
+### Prerequisites
+
+1. **PAUSE Account**: Create an account at https://pause.perl.org/pause/query?ACTION=request_id
+2. **Quality Check**: Ensure your code passes all tests and quality checks
+
+```bash
+# Run quality checks
+perlcritic lib/App/GitKtti.pm
+perl Makefile.PL
+make test
+make disttest
+```
+
+### Command Line Upload
+
+The recommended method for uploading to CPAN using the command line:
+
+#### Step 1: Install Upload Tool
+
+```bash
+# Install CPAN::Uploader (preferred method)
+cpanm CPAN::Uploader
+# or
+cpan CPAN::Uploader
+```
+
+#### Step 2: Configure PAUSE Credentials
+
+```bash
+# Create credentials file (one time setup)
+echo "user YOUR_PAUSE_ID" > ~/.pause
+echo "password YOUR_PASSWORD" >> ~/.pause
+chmod 600 ~/.pause
+```
+
+Replace `YOUR_PAUSE_ID` and `YOUR_PASSWORD` with your actual PAUSE credentials.
+
+#### Step 3: Prepare Distribution
+
+```bash
+# Clean and build distribution
+make realclean
+perl Makefile.PL
+make
+make test
+make dist
+```
+
+This creates: `App-GitKtti-X.Y.Z.tar.gz`
+
+#### Step 4: Upload to CPAN
+
+```bash
+# Upload your distribution
+cpan-upload App-GitKtti-X.Y.Z.tar.gz
+```
+
+#### What Happens Next
+
+1. **Immediate confirmation**: Command line feedback
+2. **PAUSE email**: Confirmation email from PAUSE
+3. **CPAN indexing**: ~15-30 minutes to appear on CPAN
+4. **MetaCPAN**: Module visible on https://metacpan.org/
+
+#### Complete Example
+
+```bash
+# Full workflow example
+cd ~/work/scripts/perl/gitktti
+
+# Quality checks
+perlcritic lib/App/GitKtti.pm
+make realclean
+perl Makefile.PL
+make test
+make disttest
+
+# Build distribution
+make dist
+
+# Upload (assuming credentials already configured)
+cpan-upload App-GitKtti-2.0.0.tar.gz
+```
+
+**Note**: Only authorized maintainers with PAUSE access can upload to CPAN.
 
 ***
 
-## Releases
+## 📋 Recent Releases
+
+### Release `2.0.0` - 10/09/2025 🆕
+
+**🚀 MAJOR MODERNIZATION RELEASE - CPAN READY!**
+
+- **BREAKING CHANGES:** Complete architecture modernization for CPAN distribution
+- **NEW:** CPAN installable with `cpanm App::GitKtti` or `cpan App::GitKtti`
+- **NEW:** Scripts renamed with `gitktti-` prefix (e.g., `gitktti-checkout`)
+- **NEW:** Professional test suite and modern documentation
+- **MIGRATION:** Old `perl gitktti_*.pl` → New `gitktti-*` commands
 
 ### Release `1.3.3` - 27/08/2025
 
-- NEW FEATURES:
-  - **gitkkti:** gitkkti logo is now displayed in the terminal
+- GitKtti logo now displayed in terminal
 
 ### Release `1.3.2` - 25/08/2025
 
-- NEW FEATURES:
-  - **docs:** reorganization
+- Documentation reorganization
 
 ### Release `1.3.1` - 24/08/2025
 
-- NEW FEATURES:
-  - **gitkkti:** added landing page
+- Added landing page
 
-### Release `1.3.0` - 24/08/2025
+***
 
-- NEW FEATURES:
-  - **kdel:** new script for deleting branches
-
-### Release `1.2.0` - 18/08/2025
-
-- NEW FEATURES:
-  - **kmove:** new script for renaming branches
-  - **kfeat:** removed --tag option
-
-### Release `1.1.0` - 17/08/2025
-
-- NEW FEATURES:
-  - **gitkkti:** changed branches naming convention
-
-### Release `1.0.4` - 16/08/2025
-
-- NEW FEATURES:
-  - **gitkkti:** console output modernization
-
-### Release `1.0.3` - 07/08/2025
-
-- NEW FEATURES:
-  - **kco:** command is now less strict when using `--delete` arg
-
-### Release `1.0.2` - 28/06/2025
-
-- NEW FEATURES:
-  - **README:** added detailed workflows for feature, hotfix, release, and hotfix
-    during release
-
-### Release `1.0.1` - 25/03/2023
-
-- NEW FEATURES:
-  - **kprune:** added possibility to delete local branches
-
-### Release `1.0.0` - 23/03/2023
-
-- NEW FEATURES:
-  - **gitktti:** first release
+**📚 For complete version history and detailed changelogs, see [Changes](Changes) file**

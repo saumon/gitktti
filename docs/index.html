@@ -840,7 +840,7 @@
             <div class="hero-logo"></div>
             <h1>GitKtti™</h1>
             <p class="subtitle">Git Flow Made Simple</p>
-            <p class="tagline">A powerful collection of Perl scripts designed to streamline your Git Flow workflow</p>
+            <p class="tagline">A modern CPAN-ready collection of tools designed to streamline your Git Flow workflow</p>
             <a href="https://github.com/saumon/gitktti" class="cta-button">View on GitHub</a>
         </div>
     </section>
@@ -867,8 +867,8 @@
                     </div>
                     <div class="feature-card">
                         <div class="feature-icon">⚡</div>
-                        <h3>Powerful Aliases</h3>
-                        <p>Short, memorable aliases transform long commands into quick operations. Boost your productivity with <code>kfeat</code>, <code>kfix</code>, and more.</p>
+                        <h3>CPAN Ready</h3>
+                        <p>Modern CPAN distribution with proper installation via <code>cpanm App::GitKtti</code>. Optional aliases available for power users.</p>
                     </div>
                     <div class="feature-card">
                         <div class="feature-icon">🎯</div>
@@ -877,8 +877,8 @@
                     </div>
                     <div class="feature-card">
                         <div class="feature-icon">🏷️</div>
-                        <h3>Version Control</h3>
-                        <p>Automated tagging and release management with semantic versioning support for professional software delivery.</p>
+                        <h3>Professional Tools</h3>
+                        <p>Complete suite with <code>gitktti-tag</code>, <code>gitktti-tests</code>, and comprehensive help system for professional development workflows.</p>
                     </div>
                 </div>
             </section>
@@ -915,31 +915,56 @@
                         <p>Smart branch checkout with Git flow awareness</p>
                     </div>
                     <div class="alias-item">
-                        <code>kprune</code>
-                        <p>Clean up merged local branches</p>
+                        <code>ktest</code>
+                        <p>Run diagnostic tests</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="modernization-section" style="background: rgba(15, 15, 15, 0.9); padding: 6rem 2rem; border-top: 1px solid rgba(102, 126, 234, 0.3); border-bottom: 1px solid rgba(102, 126, 234, 0.3);">
+                <h2 style="text-align: center; font-size: 3.5rem; margin-bottom: 4rem; color: #e0e0e0; text-shadow: 0 0 30px rgba(118, 75, 162, 0.5); font-weight: 800;">🚀 Version 2.0 - Modern Architecture</h2>
+                <div style="max-width: 1000px; margin: 0 auto;">
+                    <div style="background: rgba(30, 30, 30, 0.8); padding: 3rem; border-radius: 25px; border: 1px solid rgba(102, 126, 234, 0.3); backdrop-filter: blur(10px); margin-bottom: 3rem;">
+                        <h3 style="font-size: 1.8rem; margin-bottom: 2rem; color: #667eea; font-weight: 700;">What's New in 2.0?</h3>
+                        <ul style="color: #b0b0b0; line-height: 1.8; font-size: 1.1rem; list-style: none; padding: 0;">
+                            <li style="margin: 1rem 0; padding-left: 2rem; position: relative;">
+                                <span style="position: absolute; left: 0; color: #667eea;">✓</span>
+                                <strong>CPAN Distribution:</strong> Install with <code style="background: rgba(102, 126, 234, 0.2); padding: 0.4rem 0.8rem; border-radius: 6px; color: #667eea;">cpanm App::GitKtti</code>
+                            </li>
+                            <li style="margin: 1rem 0; padding-left: 2rem; position: relative;">
+                                <span style="position: absolute; left: 0; color: #667eea;">✓</span>
+                                <strong>Modern Commands:</strong> <code style="background: rgba(102, 126, 234, 0.2); padding: 0.4rem 0.8rem; border-radius: 6px; color: #667eea;">gitktti-*</code> instead of <code style="background: rgba(102, 126, 234, 0.2); padding: 0.4rem 0.8rem; border-radius: 6px; color: #667eea;">perl gitktti_*.pl</code>
+                            </li>
+                            <li style="margin: 1rem 0; padding-left: 2rem; position: relative;">
+                                <span style="position: absolute; left: 0; color: #667eea;">✓</span>
+                                <strong>Better Documentation:</strong> Built-in help with <code style="background: rgba(102, 126, 234, 0.2); padding: 0.4rem 0.8rem; border-radius: 6px; color: #667eea;">--help</code> on every command
+                            </li>
+                        </ul>
                     </div>
                 </div>
             </section>
 
             <section class="installation">
                 <h2>Getting Started</h2>
-                <p>Clone the repository and set up your environment:</p>
+                <p>Install GitKtti™ directly from CPAN or from source:</p>
                 <div class="code-block">
-<span class="comment"># Clone the repository</span>
+<span class="comment"># Install from CPAN (Recommended)</span>
+<span class="prompt">$</span> <span class="command">cpanm</span> <span class="variable">App::GitKtti</span>
+
+<span class="comment"># Or install from source</span>
 <span class="prompt">$</span> <span class="command">git clone</span> <span class="url">https://github.com/saumon/gitktti.git</span>
+<span class="prompt">$</span> <span class="command">cd</span> <span class="path">gitktti</span>
+<span class="prompt">$</span> <span class="command">./install.sh</span>
 
-<span class="comment"># Add to your Perl library path</span>
-<span class="prompt">$</span> <span class="command">export</span> <span class="variable">PERL5LIB</span>=<span class="path">/path/to/gitktti/modules</span>
-
-<span class="comment"># Create aliases in your shell profile</span>
-<span class="prompt">$</span> <span class="command">alias</span> <span class="alias">kfeat</span>=<span class="string">'/path/to/gitktti_fix.pl --mode feature'</span>
-<span class="prompt">$</span> <span class="command">alias</span> <span class="alias">kfix</span>=<span class="string">'/path/to/gitktti_fix.pl'</span>
-<span class="prompt">$</span> <span class="command">alias</span> <span class="alias">kreal</span>=<span class="string">'/path/to/gitktti_fix.pl --mode release'</span>
-<span class="prompt">$</span> <span class="command">alias</span> <span class="alias">kfixend</span>=<span class="string">'/path/to/gitktti_fixend.pl'</span>
-<span class="prompt">$</span> <span class="command">alias</span> <span class="alias">kmove</span>=<span class="string">'/path/to/gitktti_move.pl'</span>
-<span class="prompt">$</span> <span class="command">alias</span> <span class="alias">kdel</span>=<span class="string">'/path/to/gitktti_delete.pl'</span>
-<span class="prompt">$</span> <span class="command">alias</span> <span class="alias">kco</span>=<span class="string">'/path/to/gitktti_checkout.pl'</span>
-<span class="prompt">$</span> <span class="command">alias</span> <span class="alias">kprune</span>=<span class="string">'/path/to/gitktti_fix.pl --prune'</span>
+<span class="comment"># Optional: Create convenient aliases</span>
+<span class="prompt">$</span> <span class="command">alias</span> <span class="alias">kfeat</span>=<span class="string">'gitktti-fix --mode feature'</span>
+<span class="prompt">$</span> <span class="command">alias</span> <span class="alias">kfix</span>=<span class="string">'gitktti-fix'</span>
+<span class="prompt">$</span> <span class="command">alias</span> <span class="alias">kreal</span>=<span class="string">'gitktti-fix --mode release'</span>
+<span class="prompt">$</span> <span class="command">alias</span> <span class="alias">kfixend</span>=<span class="string">'gitktti-fixend'</span>
+<span class="prompt">$</span> <span class="command">alias</span> <span class="alias">kmove</span>=<span class="string">'gitktti-move'</span>
+<span class="prompt">$</span> <span class="command">alias</span> <span class="alias">kdel</span>=<span class="string">'gitktti-delete'</span>
+<span class="prompt">$</span> <span class="command">alias</span> <span class="alias">kco</span>=<span class="string">'gitktti-checkout'</span>
+<span class="prompt">$</span> <span class="command">alias</span> <span class="alias">kprune</span>=<span class="string">'gitktti-fix --prune'</span>
                 </div>
             </section>
 
@@ -974,6 +999,7 @@
     <footer>
         <div class="container">
             <p>&copy; 2025 GitKtti™ by saumon™. Made with ❤️ for developers who love clean Git workflows.</p>
+            <p style="margin-top: 1rem; color: #667eea; font-size: 1rem;">🚀 Now available on CPAN - Version 2.0.0</p>
             <div class="footer-links">
                 <a href="https://github.com/saumon/gitktti">GitHub Repository</a>
                 <a href="https://github.com/saumon/gitktti/issues">Report Issues</a>
