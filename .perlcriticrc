@@ -1,0 +1,35 @@
+# GitKtti PerlCritic Configuration
+#
+# This configuration file customizes PerlCritic for the GitKtti project,
+# which is a collection of git-flow command-line tools written in Perl.
+
+# Keep severity at reasonable level for git-flow tools
+# Level 3 catches important issues without being overly pedantic
+severity = 3
+verbose = 8
+
+# Project follows its own formatting standards that prioritize readability
+# The current formatting with ## comments and indentation is consistent
+# across all GitKtti scripts and should be maintained
+[-CodeLayout::RequireTidyCode]
+
+# Allow established patterns in GitKtti
+[Variables::ProhibitPackageVars]
+packages = App::GitKtti
+
+# Git command tools often need complex regex patterns for branch matching
+# Allow slightly longer regex without requiring /x flag
+[RegularExpressions::RequireExtendedFormatting]
+minimum_regex_length_to_complain_about = 20
+
+# Scripts don't need package-scoped version variables
+# Version is managed centrally in App::GitKtti module
+[-Modules::RequireVersionVar]
+
+# Allow constants defined with Readonly (preferred over 'use constant')
+[ValuesAndExpressions::ProhibitConstantPragma]
+severity = 4
+
+# Git-flow tools need specific comment styles for clarity
+[Documentation::RequirePodSections]
+severity = 2
