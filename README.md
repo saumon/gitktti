@@ -44,7 +44,8 @@ The `gitktti` scripts are provided to help developers safely use git flow. So po
       - [What Happens Next](#what-happens-next)
       - [Complete Example](#complete-example)
   - [📋 Recent Releases](#-recent-releases)
-    - [Release `2.0.0` - 10/09/2025 🆕](#release-200---10092025-)
+    - [Release `2.0.1` - 20/09/2025](#release-201---20092025)
+    - [Release `2.0.0` - 10/09/2025](#release-200---10092025)
     - [Release `1.3.3` - 27/08/2025](#release-133---27082025)
     - [Release `1.3.2` - 25/08/2025](#release-132---25082025)
     - [Release `1.3.1` - 24/08/2025](#release-131---24082025)
@@ -561,7 +562,11 @@ cpan-upload App-GitKtti-2.0.0.tar.gz
 
 ## 📋 Recent Releases
 
-### Release `2.0.0` - 10/09/2025 🆕
+### Release `2.0.1` - 20/09/2025
+
+- Lint fixes
+
+### Release `2.0.0` - 10/09/2025
 
 **🚀 MAJOR MODERNIZATION RELEASE - CPAN READY!**
 
