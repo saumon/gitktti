@@ -1,7 +1,7 @@
 # Changes file for App-GitKtti
 2.0.1  2026-02-01
+    - NEW FEATURES: kfixend GitHub spec-kit feature branches compatibility
     - Lint fixes
-    - kfixend: GitHub spec-kit feature branches compatibility
 
 2.0.0  2025-09-10
     - MAJOR MODERNIZATION RELEASE - CPAN READY!
