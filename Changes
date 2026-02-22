@@ -1,4 +1,7 @@
 # Changes file for App-GitKtti
+2.0.2  2026-02-21
+    - NEW FEATURES: kfixend GitHub dependabot branches compatibility
+
 2.0.1  2026-02-01
     - NEW FEATURES: kfixend GitHub spec-kit feature branches compatibility
     - Lint fixes
