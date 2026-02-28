@@ -1,4 +1,7 @@
 # Changes file for App-GitKtti
+2.0.3  2026-02-28
+    - DOCS: GitHub logo on landing page
+
 2.0.2  2026-02-21
     - NEW FEATURES: kfixend GitHub dependabot branches compatibility
 

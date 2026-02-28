@@ -1,6 +1,6 @@
 ---
 name: App-GitKtti
-version: 2.0.2
+version: 2.0.3
 abstract: Git flow helper scripts for safe branch management
 author:
   - 'saumon <shrekrobu@gmail.com>'
