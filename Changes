@@ -1,4 +1,7 @@
 # Changes file for App-GitKtti
+2.0.5  2026-11-20
+    - DOCS: Landing page redesign (animated git flow demo, space theme, responsive layout)
+
 2.0.4  2026-03-05
     - DOCS: README update (added link to landing page)
     - NEW FEATURES: ktag supports main and master branches for tagging
